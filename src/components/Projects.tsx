@@ -42,7 +42,7 @@ export default function Projects({ lang }: ProjectsProps) {
           >
             <div className="flex items-center justify-between mb-5">
               <div className="grid place-items-center w-[54px] h-[54px] rounded-[14px] bg-white border border-[var(--bdr-logo)] p-2">
-                <img src={p.logo} alt={`Logo de ${p.name}`} loading="lazy" className="w-full h-full object-contain block" />
+                <img src={p.logo} alt={`Logo de ${p.name}`} loading="lazy" className="w-full h-full object-contain block rounded-lg" />
               </div>
               <span data-arrow className="flex text-neutral-400">
                 <ArrowUpRight size={20} />
