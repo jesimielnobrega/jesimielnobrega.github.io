@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#3a3f4b; font-family:'Manrope',sans-serif; -webkit-font-smoothing:antialiased; display:flex; justify-content:center; padding:24px; }
+  @media print { body { background:#fff; padding:0; -webkit-print-color-adjust:exact; print-color-adjust:exact; } @page { size:794px 1123px; margin:0; } }
+</style>
+</helmet>
+
+<div style="width:794px; min-height:1123px; display:flex; background:#ffffff; box-shadow:0 20px 60px rgba(0,0,0,0.35); overflow:hidden;">
+
+  <!-- SIDEBAR -->
+  <aside style="width:298px; flex-shrink:0; background:#0f1420; color:#e8eaf0; padding:38px 30px; position:relative;">
+    <div style="position:absolute; top:0; left:0; right:0; height:5px; background:linear-gradient(90deg,#4d6bff,#8ea2ff);"></div>
+
+    <div style="width:132px; height:132px; margin:6px auto 26px; border-radius:50%; overflow:hidden; border:3px solid rgba(77,107,255,0.5); box-shadow:0 0 0 6px rgba(77,107,255,0.12);">
+      <img src="assets/hero.png" alt="Jesimiel Nóbrega" style="width:100%; height:100%; object-fit:cover; display:block;">
+    </div>
+
+    <div style="margin-bottom:30px;">
+      <div style="font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:2px; text-transform:uppercase; color:#5f83ff; margin-bottom:12px;">Contacto</div>
+      <div style="display:flex; flex-direction:column; gap:10px; font-size:12px; color:#c2c7d4; line-height:1.4;">
+        <div style="display:flex; gap:9px; align-items:flex-start;"><span style="color:#5f83ff; flex-shrink:0;">✉</span><span style="word-break:break-all;">jesimielnobrega25@gmail.com</span></div>
+        <div style="display:flex; gap:9px; align-items:center;"><span style="color:#5f83ff;">☏</span>+244 942 031 240</div>
+        <div style="display:flex; gap:9px; align-items:center;"><span style="color:#5f83ff;">⌂</span>Rocha Pinto · Luanda, Angola</div>
+        <div style="display:flex; gap:9px; align-items:center;"><span style="color:#5f83ff;">⎇</span>github.com/jesimielnobrega</div>
+        <div style="display:flex; gap:9px; align-items:center;"><span style="color:#5f83ff;">in</span>linkedin.com/in/jesimielnobrega</div>
+      </div>
+    </div>
+
+    <div style="margin-bottom:28px;">
+      <div style="font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:2px; text-transform:uppercase; color:#5f83ff; margin-bottom:13px;">Competências</div>
+      <sc-for list="{{ skillGroups }}" as="g" hint-placeholder-count="4">
+        <div style="margin-bottom:14px;">
+          <div style="font-size:11px; font-weight:700; color:#9aa0b3; margin-bottom:7px;">{{ g.title }}</div>
+          <div style="display:flex; flex-wrap:wrap; gap:6px;">
+            <sc-for list="{{ g.items }}" as="s" hint-placeholder-count="4">
+              <span style="padding:4px 9px; font-size:10.5px; font-weight:500; color:#dfe3ec; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.09); border-radius:6px;">{{ s }}</span>
+            </sc-for>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+
+    <div style="margin-bottom:28px;">
+      <div style="font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:2px; text-transform:uppercase; color:#5f83ff; margin-bottom:13px;">Idiomas</div>
+      <div style="display:flex; flex-direction:column; gap:11px;">
+        <div>
+          <div style="display:flex; justify-content:space-between; font-size:11.5px; color:#dfe3ec; margin-bottom:5px;"><span style="font-weight:600;">Português</span><span style="color:#8a90a3;">Fluente</span></div>
+          <div style="height:4px; border-radius:4px; background:rgba(255,255,255,0.08);"><div style="height:100%; width:100%; border-radius:4px; background:linear-gradient(90deg,#4d6bff,#8ea2ff);"></div></div>
+        </div>
+        <div>
+          <div style="display:flex; justify-content:space-between; font-size:11.5px; color:#dfe3ec; margin-bottom:5px;"><span style="font-weight:600;">Inglês</span><span style="color:#8a90a3;">Intermédio</span></div>
+          <div style="height:4px; border-radius:4px; background:rgba(255,255,255,0.08);"><div style="height:100%; width:60%; border-radius:4px; background:linear-gradient(90deg,#4d6bff,#8ea2ff);"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div style="font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:2px; text-transform:uppercase; color:#5f83ff; margin-bottom:13px;">Formação</div>
+      <div style="margin-bottom:13px;">
+        <div style="font-size:12px; font-weight:700; color:#fff; line-height:1.35;">Engenharia Informática</div>
+        <div style="font-size:11px; color:#9aa0b3; margin-top:2px;">Univ. Metodista de Angola · em curso</div>
+      </div>
+      <div>
+        <div style="font-size:12px; font-weight:700; color:#fff; line-height:1.35;">Técnico de Informática</div>
+        <div style="font-size:11px; color:#9aa0b3; margin-top:2px;">IPIL — Ensino Técnico-Profissional</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main style="flex:1; padding:42px 42px 38px; color:#14161c;">
+    <header style="margin-bottom:26px;">
+      <h1 style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:38px; letter-spacing:-1.5px; color:#0f1420; line-height:1;">Jesimiel Nóbrega</h1>
+      <div style="display:flex; align-items:center; gap:11px; margin-top:10px;">
+        <span style="height:2px; width:34px; background:#4d6bff;"></span>
+        <span style="font-family:'JetBrains Mono',monospace; font-size:13px; letter-spacing:0.5px; color:#4d6bff; font-weight:500;">Desenvolvedor Fullstack &amp; Líder Técnico</span>
+      </div>
+    </header>
+
+    <section style="margin-bottom:26px;">
+      <p style="font-size:12.5px; line-height:1.62; color:#3f4452;">Desenvolvedor fullstack, líder de equipa técnica e arquiteto de software de base de dados, com atuação em plataformas de <strong style="color:#0f1420;">escala nacional e provincial</strong> em Angola. Foco em arquitetura, práticas de CI/CD e entrega em produção — sempre com SOLID, Clean Code e DRY.</p>
+    </section>
+
+    <section style="margin-bottom:24px;">
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:16px;">
+        <h2 style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:15px; letter-spacing:0.3px; color:#0f1420; text-transform:uppercase;">Experiência</h2>
+        <span style="flex:1; height:1px; background:#e4e6ec;"></span>
+      </div>
+      <sc-for list="{{ experience }}" as="e" hint-placeholder-count="3">
+        <div style="position:relative; padding-left:20px; padding-bottom:16px; border-left:2px solid #e4e6ec;">
+          <span style="position:absolute; left:-6px; top:3px; width:10px; height:10px; border-radius:50%; background:#4d6bff; border:2px solid #fff;"></span>
+          <div style="display:flex; justify-content:space-between; align-items:baseline; gap:12px;">
+            <span style="font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:14px; color:#0f1420;">{{ e.role }}</span>
+            <span style="font-family:'JetBrains Mono',monospace; font-size:10.5px; color:#8a90a3; white-space:nowrap;">{{ e.period }}</span>
+          </div>
+          <div style="font-size:12px; font-weight:600; color:#4d6bff; margin:2px 0 6px;">{{ e.org }}</div>
+          <p style="font-size:11.5px; line-height:1.55; color:#565b69;">{{ e.desc }}</p>
+        </div>
+      </sc-for>
+    </section>
+
+    <section>
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:16px;">
+        <h2 style="font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:15px; letter-spacing:0.3px; color:#0f1420; text-transform:uppercase;">Projetos em destaque</h2>
+        <span style="flex:1; height:1px; background:#e4e6ec;"></span>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:12px;">
+        <sc-for list="{{ projects }}" as="p" hint-placeholder-count="3">
+          <div style="display:flex; gap:13px; align-items:flex-start;">
+            <div style="display:grid; place-items:center; width:34px; height:34px; flex-shrink:0; border-radius:9px; background:rgba(77,107,255,0.1); border:1px solid rgba(77,107,255,0.22); font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:15px; color:#4d6bff;">{{ p.mono }}</div>
+            <div style="flex:1;">
+              <div style="display:flex; align-items:center; gap:9px; flex-wrap:wrap;">
+                <span style="font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:13.5px; color:#0f1420;">{{ p.name }}</span>
+                <span style="padding:1px 8px; font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:0.4px; text-transform:uppercase; color:#4d6bff; background:rgba(77,107,255,0.1); border-radius:100px;">{{ p.scope }}</span>
+                <span style="font-family:'JetBrains Mono',monospace; font-size:10px; color:#a2a7b3;">{{ p.domain }}</span>
+              </div>
+              <p style="font-size:11px; line-height:1.5; color:#565b69; margin:3px 0 4px;">{{ p.desc }}</p>
+              <div style="font-family:'JetBrains Mono',monospace; font-size:10px; color:#8a90a3;">{{ p.stack }}</div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+      <p style="font-size:10.5px; color:#8a90a3; margin-top:14px; line-height:1.5;"><strong style="color:#565b69;">Também:</strong> Loja Online AGIM · Sistema de Correção de Provas · Gestão Documental · Gestão de Resíduos Sólidos. Uso de scripts internos em Python (ex.: remoção de fundo) integrados nas plataformas.</p>
+    </section>
+  </main>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:794,&quot;height&quot;:1123}}">
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      skillGroups: [
+        { title:'Frontend', items:['React','Next.js','Tailwind','Inertia.js','Bootstrap'] },
+        { title:'Backend', items:['Laravel','Node.js','PHP','C#'] },
+        { title:'Linguagens', items:['TypeScript','JavaScript','Python','SQL'] },
+        { title:'Base de dados', items:['PostgreSQL','MySQL','SQL Server','MongoDB'] },
+        { title:'Ferramentas & DevOps', items:['Git','Docker','CI/CD','VS Code','Figma'] }
+      ],
+      experience: [
+        { role:'Desenvolvedor Sénior & Líder Técnico', org:'SOSOFT LDA', period:'Presente', desc:'Liderança da equipa técnica no desenvolvimento e entrega de plataformas de escala nacional e provincial — Acesso ETP, SIPE / SIPE-GPEL e Portal do IPIL. Definição de arquitetura, práticas de CI/CD e fluxos de deploy próprios de cada plataforma.' },
+        { role:'Desenvolvedor — Freelancer enquadrado', org:'ESSJ LDA', period:'Projetos', desc:'Colaboração como freelancer enquadrado no desenvolvimento do Acesso ETP e do Sistema de Correção de Provas.' },
+        { role:'Auxiliar Técnico · Help Desk · Dev', org:'AGIM CORPORATE LDA', period:'9 meses', desc:'Suporte técnico e desenvolvimento de soluções, incluindo a Loja Online AGIM.' }
+      ],
+      projects: [
+        { mono:'A', name:'Acesso ETP', scope:'Nacional', domain:'acessoetp.ao', desc:'Plataforma nacional de acesso ao ensino técnico-profissional — candidaturas, colocação e gestão de vagas.', stack:'Laravel · Inertia · React · Python' },
+        { mono:'S', name:'SIPE · SIPE-GPEL', scope:'Provincial', domain:'sipe.ao · luanda.sipe.ao', desc:'Sistema de informação e gestão provincial, com instância dedicada ao Governo Provincial de Luanda.', stack:'Laravel · Inertia · React · Python' },
+        { mono:'I', name:'Portal do IPIL', scope:'Liderança', domain:'portal.ipil.ao', desc:'Portal de gestão escolar do IPIL, com liderança técnica do projeto e coordenação do desenvolvimento pela equipa.', stack:'Node.js · React · Python' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>
