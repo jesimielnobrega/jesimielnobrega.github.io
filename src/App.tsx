@@ -38,16 +38,8 @@ export default function App() {
 
       <div
         aria-hidden="true"
-        className="animate-pulse-glow"
+        className="animate-pulse-glow fixed -top-[15%] left-1/2 -translate-x-1/2 w-[900px] h-[600px] z-0 pointer-events-none"
         style={{
-          position: "fixed",
-          top: "-15%",
-          left: "50%",
-          transform: "translateX(-50%)",
-          width: 900,
-          height: 600,
-          zIndex: 0,
-          pointerEvents: "none",
           background: "radial-gradient(circle, #4d6bff 0%, transparent 60%)",
           filter: "blur(30px)",
           opacity: "var(--glow-op)",

@@ -44,7 +44,9 @@ export default function Stack({ lang }: StackProps) {
                     }
                   />
                 )}
-                {core.mono && <span className="core-mono">{core.mono}</span>}
+                {core.mono && (
+                  <span className="core-mono">{core.mono}</span>
+                )}
               </div>
 
               <span className="core-label">

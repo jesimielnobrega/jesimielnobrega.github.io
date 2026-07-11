@@ -27,7 +27,9 @@ export default function Projects({ lang }: ProjectsProps) {
       className="section"
     >
       <SectionHead num="02" id="proj-h" label={t.proj.heading} />
-      <p className="proj-intro">{t.proj.intro}</p>
+      <p className="text-[15.5px] text-[var(--txt-subtle)] mb-9 max-w-[640px]">
+        {t.proj.intro}
+      </p>
 
       <div className="proj-grid">
         {projects.map((p) => (
@@ -38,9 +40,9 @@ export default function Projects({ lang }: ProjectsProps) {
             rel="noopener noreferrer"
             className="proj-card"
           >
-            <div className="proj-card-top">
-              <div className="proj-logo-box">
-                <img src={p.logo} alt={`Logo de ${p.name}`} loading="lazy" />
+            <div className="flex items-center justify-between mb-5">
+              <div className="grid place-items-center w-[54px] h-[54px] rounded-[14px] bg-white border border-[var(--bdr-logo)] p-2">
+                <img src={p.logo} alt={`Logo de ${p.name}`} loading="lazy" className="w-full h-full object-contain block" />
               </div>
               <span data-arrow className="flex text-neutral-400">
                 <ArrowUpRight size={20} />
@@ -51,11 +53,13 @@ export default function Projects({ lang }: ProjectsProps) {
 
             <span className="proj-name">{p.name}</span>
 
-            <p className="proj-desc">{p.desc}</p>
+            <p className="text-sm leading-relaxed text-[var(--txt-muted)] mb-[18px] flex-1">
+              {p.desc}
+            </p>
 
             <div className="proj-domain">{p.domain}</div>
 
-            <div className="proj-tags">
+            <div className="flex flex-wrap gap-1.5">
               {p.stack.map((s) => (
                 <span key={s} className="proj-tag">
                   {s}
@@ -66,14 +70,20 @@ export default function Projects({ lang }: ProjectsProps) {
         ))}
       </div>
 
-      <div className="pynote">
+      <div className="flex flex-wrap items-center gap-3 mt-[22px] p-[18px_22px] bg-[var(--bg-pynote)] border border-[var(--bdr-pynote)] rounded-[14px]">
         <Code2 size={20} color="#4d6bff" className="shrink-0" />
-        <span className="pynote-text">{t.proj.pyNote}</span>
+        <span className="text-sm text-[var(--txt-pynote)] leading-relaxed">
+          {t.proj.pyNote}
+        </span>
       </div>
 
-      <div className="others-row">
-        <span className="others-lbl">{t.proj.othersLabel} — </span>
-        <span className="others-val">{t.proj.othersList}</span>
+      <div className="mt-[22px]">
+        <span className="font-mono text-xs text-[var(--txt-dim)] uppercase tracking-[1.5px]">
+          {t.proj.othersLabel} —{" "}
+        </span>
+        <span className="text-sm text-[var(--txt-muted)]">
+          {t.proj.othersList}
+        </span>
       </div>
     </motion.section>
   );

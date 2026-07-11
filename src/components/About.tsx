@@ -27,12 +27,18 @@ export default function About({ lang }: AboutProps) {
 
       <div className="about-grid">
         <div>
-          <p className="lead-text">{t.about.p1}</p>
-          <p className="para-text">{t.about.p2}</p>
-          <p className="para-text">{t.about.p3}</p>
+          <p className="text-[clamp(17px,2vw,21px)] leading-[1.65] text-[var(--txt-lead)] font-medium mb-5">
+            {t.about.p1}
+          </p>
+          <p className="text-base leading-[1.7] text-[var(--txt-subtle)] mb-4">
+            {t.about.p2}
+          </p>
+          <p className="text-base leading-[1.7] text-[var(--txt-subtle)] mb-4">
+            {t.about.p3}
+          </p>
         </div>
 
-        <div className="info-cards">
+        <div className="flex flex-col gap-3">
           {[
             { label: t.about.focusL, value: t.about.focusV },
             { label: t.about.availL, value: t.about.availV },

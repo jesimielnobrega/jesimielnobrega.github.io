@@ -65,15 +65,19 @@ export default function Hero({ lang, glowY }: HeroProps) {
           </a>
         </motion.div>
 
-        <motion.div variants={itemAnim} className="hero-stats">
+        <motion.div variants={itemAnim} className="flex flex-wrap gap-[clamp(28px,4vw,52px)]">
           {[
             { num: t.hero.stat1n, label: t.hero.stat1l },
             { num: t.hero.stat2n, label: t.hero.stat2l },
             { num: t.hero.stat3n, label: t.hero.stat3l },
           ].map((stat, i) => (
             <div key={i}>
-              <div className="stat-n">{stat.num}</div>
-              <div className="stat-l">{stat.label}</div>
+              <div className="font-space font-bold text-[32px] text-[var(--txt-white)] tracking-[-1.5px]">
+                {stat.num}
+              </div>
+              <div className="text-[13px] text-[var(--txt-subtle)] mt-[3px]">
+                {stat.label}
+              </div>
             </div>
           ))}
         </motion.div>
@@ -104,7 +108,7 @@ export default function Hero({ lang, glowY }: HeroProps) {
         </div>
 
         <div className="photo-loc">
-          <span style={{ color: "#4d6bff" }}>◆</span> Luanda · Angola
+          <span className="text-accent">◆</span> Luanda · Angola
         </div>
 
         <div className="photo-chip animate-floaty">

@@ -6,12 +6,12 @@ interface SectionHeadProps {
 
 export default function SectionHead({ num, id, label }: SectionHeadProps) {
   return (
-    <div className="section-head">
-      <span className="section-num">{num}</span>
-      <h2 id={id} className="section-title">
+    <div className="flex items-center gap-3.5 mb-10">
+      <span className="font-mono text-[13px] text-accent">{num}</span>
+      <h2 id={id} className="font-space font-bold text-[clamp(26px,3.5vw,38px)] tracking-tight text-[var(--txt)]">
         {label}
       </h2>
-      <span className="section-rule" />
+      <span className="flex-1 h-px bg-[var(--rule)]" />
     </div>
   );
 }
