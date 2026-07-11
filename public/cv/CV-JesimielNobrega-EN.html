@@ -91,7 +91,7 @@
     </header>
 
     <section style="margin-bottom:26px;">
-      <p style="font-size:12.5px; line-height:1.62; color:#3f4452;">Fullstack developer, technical team lead and database software architect, working on <strong style="color:#0f1420;">nationwide and province-scale platforms</strong> in Angola. Focused on architecture, CI/CD practices and production delivery — always following SOLID, Clean Code and DRY.</p>
+      <p style="font-size:12.5px; line-height:1.62; color:#3f4452;">Fullstack engineer with proven experience building <strong style="color:#0f1420;">large-scale systems for the public sector</strong> in Angola. I lead technical teams in the design, architecture and continuous delivery of platforms serving thousands of users — focused on performance, reliability and sustainable code.</p>
     </section>
 
     <section style="margin-bottom:24px;">
@@ -133,7 +133,7 @@
           </div>
         </sc-for>
       </div>
-      <p style="font-size:10.5px; color:#8a90a3; margin-top:14px; line-height:1.5;"><strong style="color:#565b69;">Also:</strong> AGIM Online Store · Exam Grading System · Document Management · Solid Waste Management. Internal Python scripts (e.g. background removal) integrated into the platforms.</p>
+      <p style="font-size:10.5px; color:#8a90a3; margin-top:14px; line-height:1.5;"><strong style="color:#565b69;">Other projects:</strong> AGIM Online Store · Exam Grading System · Document Management · Solid Waste Management. Development of internal Python scripts (e.g. background removal, process automation) integrated into the platforms.</p>
     </section>
   </main>
 
@@ -144,21 +144,21 @@ class Component extends DCLogic {
   renderVals() {
     return {
       skillGroups: [
-        { title:'Frontend', items:['React','Next.js','Tailwind','Inertia.js','Bootstrap'] },
-        { title:'Backend', items:['Laravel','Node.js','PHP','C#'] },
-        { title:'Languages', items:['TypeScript','JavaScript','Python','SQL'] },
-        { title:'Databases', items:['PostgreSQL','MySQL','SQL Server','MongoDB'] },
-        { title:'Tools & DevOps', items:['Git','Docker','CI/CD','VS Code','Figma'] }
+        { title:'Frontend', items:['React','React Native','Next.js','Tailwind','Inertia.js','Bootstrap'] },
+        { title:'Backend', items:['Laravel','Node.js'] },
+        { title:'Languages', items:['TypeScript','JavaScript','Python','PHP','C#'] },
+        { title:'Databases', items:['SQL','PostgreSQL','MySQL','SQL Server','MongoDB'] },
+        { title:'Tools & DevOps', items:['Git','Docker','CI/CD','VS Code'] }
       ],
       experience: [
-        { role:'Senior Developer & Tech Lead', org:'SOSOFT LDA', period:'Present', desc:'Leadership of the technical team in the development and delivery of national and provincial-scale platforms — Acesso ETP, SIPE / SIPE-GPEL and the IPIL Portal. Architecture definition, CI/CD practices and custom deploy flows for each platform.' },
-        { role:'Developer — Embedded Freelancer', org:'ESSJ LDA', period:'Projects', desc:'Contributed as an embedded freelancer to Acesso ETP and the Exam Grading System.' },
-        { role:'Technical Assistant · Help Desk · Dev', org:'AGIM CORPORATE LDA', period:'9 months', desc:'Technical support and solution development, including the AGIM Online Store.' }
+        { role:'Senior Developer & Tech Lead', org:'SOSOFT LDA', period:'Present', desc:'Leading the technical team in the development of 3 nationwide and province-scale platforms — Acesso ETP, SIPE/SIPE-GPEL and IPIL Portal. Defining software architecture, implementing CI/CD pipelines and ensuring continuous production delivery. Responsible for technical decision-making, code review and developer mentorship.' },
+        { role:'Fullstack Developer — Freelancer', org:'ESSJ LDA', period:'Projects', desc:'Integrated collaboration on the development of Acesso ETP and the Exam Grading System — a tool used for nationwide digital assessment.' },
+        { role:'Developer · Technical Support', org:'AGIM CORPORATE LDA', period:'9 months', desc:'Responsible for first-level technical support and internal solution development, including the AGIM Online Store — an e-commerce platform for the company\'s products and services.' }
       ],
       projects: [
-        { mono:'A', name:'Acesso ETP', scope:'National', domain:'acessoetp.ao', desc:'Nationwide platform for access to technical-vocational education — applications, placement and vacancy management.', stack:'Laravel · Inertia · React · Python' },
-        { mono:'S', name:'SIPE · SIPE-GPEL', scope:'Provincial', domain:'sipe.ao · luanda.sipe.ao', desc:'Province-level information and management system, with a dedicated instance for the Provincial Government of Luanda.', stack:'Laravel · Inertia · React · Python' },
-        { mono:'I', name:'Portal do IPIL', scope:'Leadership', domain:'portal.ipil.ao', desc:'IPIL school-management portal, with technical leadership of the project and coordination of the team development.', stack:'Node.js · React · Python' }
+        { mono:'A', name:'Acesso ETP', scope:'National', domain:'acessoetp.ao', desc:'Nationwide platform for access to technical-vocational education — managing applications, placement and vacancies across the country, with modular architecture and automated deployment.', stack:'Laravel · Inertia · React · Python' },
+        { mono:'S', name:'SIPE · SIPE-GPEL', scope:'Provincial', domain:'sipe.ao · luanda.sipe.ao', desc:'Provincial information and management system for the government, with a dedicated instance for the Provincial Government of Luanda. Processes data across multiple sectors with real-time management interfaces.', stack:'Laravel · Inertia · React · Python' },
+        { mono:'I', name:'IPIL Portal', scope:'Leadership', domain:'portal.ipil.ao', desc:'IPIL school management portal — serving as technical lead, coordinating the development team and defining the platform architecture. Integrates academic management, communication and administration modules.', stack:'Node.js · React · Python' }
       ]
     };
   }
