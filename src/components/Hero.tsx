@@ -54,8 +54,8 @@ export default function Hero({ lang, glowY }: HeroProps) {
           <a
             href={
               lang === "en"
-                ? "cv/CV-JesimielNobrega-EN.html"
-                : "cv/CV-JesimielNobrega-PT.html"
+                ? "cv/CV-JesimielNobrega-EN-Claro.html"
+                : "cv/CV-JesimielNobrega-PT-Claro.html"
             }
             target="_blank"
             rel="noopener noreferrer"
