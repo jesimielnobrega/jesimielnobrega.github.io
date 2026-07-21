@@ -1,20 +1,15 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Play, RotateCcw, Trophy, Volume2, VolumeX, MessageSquare } from "lucide-react";
+import { X, Play, RotateCcw, Trophy, Volume2, VolumeX, MessageSquare, Zap } from "lucide-react";
 
 interface BugHunterGameProps {
   isOpen: boolean;
   onClose: () => void;
 }
 
-// Simple Web Audio API sound synthesizer
 class SoundFX {
   private ctx: AudioContext | null = null;
   public enabled: boolean = true;
-
-  constructor() {
-    // AudioContext will be initialized on first user action
-  }
 
   private init() {
     if (!this.ctx && typeof window !== "undefined") {
@@ -27,52 +22,64 @@ class SoundFX {
     if (!this.enabled) return;
     this.init();
     if (!this.ctx) return;
-    const osc = this.ctx.createOscillator();
-    const gain = this.ctx.createGain();
-    osc.type = "square";
-    osc.frequency.setValueAtTime(800, this.ctx.currentTime);
-    osc.frequency.exponentialRampToValueAtTime(150, this.ctx.currentTime + 0.1);
-    gain.gain.setValueAtTime(0.15, this.ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.1);
-    osc.connect(gain);
-    gain.connect(this.ctx.destination);
-    osc.start();
-    osc.stop(this.ctx.currentTime + 0.1);
+    try {
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      osc.type = "square";
+      osc.frequency.setValueAtTime(800, this.ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(200, this.ctx.currentTime + 0.08);
+      gain.gain.setValueAtTime(0.1, this.ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.08);
+      osc.connect(gain);
+      gain.connect(this.ctx.destination);
+      osc.start();
+      osc.stop(this.ctx.currentTime + 0.08);
+    } catch {
+      // Ignore audio context errors on un-interacted browsers
+    }
   }
 
   playHit() {
     if (!this.enabled) return;
     this.init();
     if (!this.ctx) return;
-    const osc = this.ctx.createOscillator();
-    const gain = this.ctx.createGain();
-    osc.type = "sawtooth";
-    osc.frequency.setValueAtTime(250, this.ctx.currentTime);
-    osc.frequency.exponentialRampToValueAtTime(40, this.ctx.currentTime + 0.15);
-    gain.gain.setValueAtTime(0.2, this.ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.15);
-    osc.connect(gain);
-    gain.connect(this.ctx.destination);
-    osc.start();
-    osc.stop(this.ctx.currentTime + 0.15);
+    try {
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      osc.type = "sawtooth";
+      osc.frequency.setValueAtTime(220, this.ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(40, this.ctx.currentTime + 0.12);
+      gain.gain.setValueAtTime(0.15, this.ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.12);
+      osc.connect(gain);
+      gain.connect(this.ctx.destination);
+      osc.start();
+      osc.stop(this.ctx.currentTime + 0.12);
+    } catch {
+      // Ignore
+    }
   }
 
-  playPowerup() {
+  playLevelUp() {
     if (!this.enabled) return;
     this.init();
     if (!this.ctx) return;
-    const osc = this.ctx.createOscillator();
-    const gain = this.ctx.createGain();
-    osc.type = "sine";
-    osc.frequency.setValueAtTime(400, this.ctx.currentTime);
-    osc.frequency.setValueAtTime(600, this.ctx.currentTime + 0.08);
-    osc.frequency.setValueAtTime(900, this.ctx.currentTime + 0.16);
-    gain.gain.setValueAtTime(0.2, this.ctx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.25);
-    osc.connect(gain);
-    gain.connect(this.ctx.destination);
-    osc.start();
-    osc.stop(this.ctx.currentTime + 0.25);
+    try {
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      osc.type = "triangle";
+      osc.frequency.setValueAtTime(440, this.ctx.currentTime);
+      osc.frequency.setValueAtTime(554, this.ctx.currentTime + 0.08);
+      osc.frequency.setValueAtTime(659, this.ctx.currentTime + 0.16);
+      gain.gain.setValueAtTime(0.15, this.ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.25);
+      osc.connect(gain);
+      gain.connect(this.ctx.destination);
+      osc.start();
+      osc.stop(this.ctx.currentTime + 0.25);
+    } catch {
+      // Ignore
+    }
   }
 }
 
@@ -85,6 +92,11 @@ export default function BugHunterGame({ isOpen, onClose }: BugHunterGameProps) {
   const [highScore, setHighScore] = useState(0);
   const [level, setLevel] = useState(1);
   const [soundOn, setSoundOn] = useState(true);
+  const [levelUpToast, setLevelUpToast] = useState<string | null>(null);
+
+  // Keep references to score & level to avoid state re-render lags inside animation frame loop
+  const scoreRef = useRef(0);
+  const levelRef = useRef(1);
 
   useEffect(() => {
     const saved = localStorage.getItem("bughunter_highscore");
@@ -95,6 +107,12 @@ export default function BugHunterGame({ isOpen, onClose }: BugHunterGameProps) {
     sfx.enabled = soundOn;
   }, [soundOn]);
 
+  const triggerLevelUpToast = useCallback((lvlName: string) => {
+    setLevelUpToast(lvlName);
+    sfx.playLevelUp();
+    setTimeout(() => setLevelUpToast(null), 2000);
+  }, []);
+
   useEffect(() => {
     if (!isOpen || gameState !== "playing") return;
 
@@ -104,15 +122,20 @@ export default function BugHunterGame({ isOpen, onClose }: BugHunterGameProps) {
     if (!ctx) return;
 
     let animationFrameId: number;
+    let lastTime = performance.now();
 
-    // Game state variables
+    // Reset game state refs
+    scoreRef.current = 0;
+    levelRef.current = 1;
+    setScore(0);
+    setLevel(1);
+
     const player = {
       x: canvas.width / 2 - 25,
       y: canvas.height - 45,
       width: 50,
-      height: 35,
-      speed: 7,
-      dx: 0,
+      height: 32,
+      speed: 450, // pixels per sec
     };
 
     let lasers: Array<{ x: number; y: number; width: number; height: number; speed: number }> = [];
@@ -120,32 +143,34 @@ export default function BugHunterGame({ isOpen, onClose }: BugHunterGameProps) {
     let particles: Array<{ x: number; y: number; vx: number; vy: number; color: string; alpha: number }> = [];
 
     const bugTypes = [
-      { label: "NullPointer", color: "#EF4444", hp: 1, speed: 2.2 },
-      { label: "500 Error", color: "#F59E0B", hp: 2, speed: 1.8 },
-      { label: "Merge Conflict", color: "#EC4899", hp: 2, speed: 2.0 },
-      { label: "Memory Leak", color: "#8B5CF6", hp: 3, speed: 1.4 },
-      { label: "Infinite Loop", color: "#10B981", hp: 1, speed: 3.0 },
+      { label: "NullPointer", color: "#EF4444", hp: 1, speed: 140 },
+      { label: "500 Error", color: "#F59E0B", hp: 2, speed: 110 },
+      { label: "Merge Conflict", color: "#EC4899", hp: 2, speed: 125 },
+      { label: "Memory Leak", color: "#8B5CF6", hp: 3, speed: 90 },
+      { label: "Infinite Loop", color: "#10B981", hp: 1, speed: 190 },
     ];
 
-    let currentScore = 0;
     let spawnTimer = 0;
     let lastShoot = 0;
-
-    // Controls
     const keys: Record<string, boolean> = {};
 
+    // Prevent default page scroll on Space & Arrow keys!
     const handleKeyDown = (e: KeyboardEvent) => {
+      if ([" ", "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.key)) {
+        e.preventDefault();
+      }
       keys[e.key] = true;
-      if (e.key === " " && Date.now() - lastShoot > 180) {
+
+      if (e.key === " " && performance.now() - lastShoot > 170) {
         lasers.push({
           x: player.x + player.width / 2 - 3,
           y: player.y,
           width: 6,
           height: 14,
-          speed: 10,
+          speed: 650,
         });
         sfx.playShoot();
-        lastShoot = Date.now();
+        lastShoot = performance.now();
       }
     };
 
@@ -155,61 +180,66 @@ export default function BugHunterGame({ isOpen, onClose }: BugHunterGameProps) {
 
     const handleMouseMove = (e: MouseEvent) => {
       const rect = canvas.getBoundingClientRect();
-      const mouseX = e.clientX - rect.left;
+      const scaleX = canvas.width / rect.width;
+      const mouseX = (e.clientX - rect.left) * scaleX;
       player.x = Math.max(0, Math.min(canvas.width - player.width, mouseX - player.width / 2));
     };
 
     const handleTouchMove = (e: TouchEvent) => {
       if (e.touches.length > 0) {
         const rect = canvas.getBoundingClientRect();
-        const touchX = e.touches[0].clientX - rect.left;
+        const scaleX = canvas.width / rect.width;
+        const touchX = (e.touches[0].clientX - rect.left) * scaleX;
         player.x = Math.max(0, Math.min(canvas.width - player.width, touchX - player.width / 2));
       }
     };
 
     const handleCanvasClick = () => {
-      if (Date.now() - lastShoot > 180) {
+      if (performance.now() - lastShoot > 170) {
         lasers.push({
           x: player.x + player.width / 2 - 3,
           y: player.y,
           width: 6,
           height: 14,
-          speed: 10,
+          speed: 650,
         });
         sfx.playShoot();
-        lastShoot = Date.now();
+        lastShoot = performance.now();
       }
     };
 
     window.addEventListener("keydown", handleKeyDown);
     window.addEventListener("keyup", handleKeyUp);
     canvas.addEventListener("mousemove", handleMouseMove);
-    canvas.addEventListener("touchmove", handleTouchMove);
+    canvas.addEventListener("touchmove", handleTouchMove, { passive: true });
     canvas.addEventListener("click", handleCanvasClick);
 
-    // Particle explosion
     const createExplosion = (x: number, y: number, color: string) => {
-      for (let i = 0; i < 12; i++) {
+      if (particles.length > 40) particles.splice(0, 15); // Cap particles to prevent lag
+      for (let i = 0; i < 8; i++) {
         particles.push({
           x,
           y,
-          vx: (Math.random() - 0.5) * 6,
-          vy: (Math.random() - 0.5) * 6,
+          vx: (Math.random() - 0.5) * 220,
+          vy: (Math.random() - 0.5) * 220,
           color,
           alpha: 1,
         });
       }
     };
 
-    // Game loop
-    const loop = () => {
+    // Smooth Game Loop with Delta Time
+    const loop = (now: number) => {
+      const dt = Math.min((now - lastTime) / 1000, 0.1); // Clamp dt to prevent teleporting on tab blur
+      lastTime = now;
+
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // Background stars / grid
-      ctx.fillStyle = "#0B0F19";
+      // Background Grid
+      ctx.fillStyle = "#090D16";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      ctx.strokeStyle = "rgba(77, 107, 255, 0.08)";
+      ctx.strokeStyle = "rgba(77, 107, 255, 0.06)";
       ctx.lineWidth = 1;
       for (let x = 0; x < canvas.width; x += 30) {
         ctx.beginPath();
@@ -218,21 +248,19 @@ export default function BugHunterGame({ isOpen, onClose }: BugHunterGameProps) {
         ctx.stroke();
       }
 
-      // Update Player Position
+      // Move Player
       if (keys["ArrowLeft"] || keys["a"] || keys["A"]) {
-        player.x = Math.max(0, player.x - player.speed);
+        player.x = Math.max(0, player.x - player.speed * dt);
       }
       if (keys["ArrowRight"] || keys["d"] || keys["D"]) {
-        player.x = Math.min(canvas.width - player.width, player.x + player.speed);
+        player.x = Math.min(canvas.width - player.width, player.x + player.speed * dt);
       }
 
-      // Draw Player Ship (Dev Rocket)
+      // Draw Ship
       ctx.save();
       ctx.fillStyle = "#38BDF8";
       ctx.shadowColor = "#38BDF8";
-      ctx.shadowBlur = 12;
-
-      // Ship body
+      ctx.shadowBlur = 10;
       ctx.beginPath();
       ctx.moveTo(player.x + player.width / 2, player.y);
       ctx.lineTo(player.x + player.width, player.y + player.height);
@@ -240,22 +268,29 @@ export default function BugHunterGame({ isOpen, onClose }: BugHunterGameProps) {
       ctx.closePath();
       ctx.fill();
 
-      // Ship thruster flame
+      // Thruster
       ctx.fillStyle = "#F59E0B";
       ctx.beginPath();
       ctx.moveTo(player.x + 18, player.y + player.height);
-      ctx.lineTo(player.x + 25, player.y + player.height + 8 + Math.random() * 6);
+      ctx.lineTo(player.x + 25, player.y + player.height + 6 + Math.random() * 6);
       ctx.lineTo(player.x + 32, player.y + player.height);
       ctx.closePath();
       ctx.fill();
       ctx.restore();
 
-      // Spawn Bugs
-      spawnTimer++;
-      const currentLevel = Math.floor(currentScore / 100) + 1;
-      setLevel(currentLevel);
+      // Check Level Up
+      const calcLevel = Math.floor(scoreRef.current / 100) + 1;
+      if (calcLevel !== levelRef.current) {
+        levelRef.current = calcLevel;
+        setLevel(calcLevel);
+        const titles = ["Junior Dev", "Pleno Dev", "Senior Dev", "Tech Lead", "Software Architect"];
+        const title = titles[Math.min(calcLevel - 1, titles.length - 1)];
+        triggerLevelUpToast(`NÍVEL ${calcLevel}: ${title.toUpperCase()}!`);
+      }
 
-      const spawnInterval = Math.max(25, 60 - currentLevel * 5);
+      // Spawn Bugs
+      spawnTimer += dt;
+      const spawnInterval = Math.max(0.4, 1.2 - (levelRef.current - 1) * 0.15);
 
       if (spawnTimer > spawnInterval) {
         spawnTimer = 0;
@@ -265,7 +300,7 @@ export default function BugHunterGame({ isOpen, onClose }: BugHunterGameProps) {
           y: -30,
           width: 85,
           height: 28,
-          speed: bType.speed + (currentLevel - 1) * 0.4,
+          speed: bType.speed + (levelRef.current - 1) * 20,
           label: bType.label,
           color: bType.color,
           hp: bType.hp,
@@ -273,28 +308,29 @@ export default function BugHunterGame({ isOpen, onClose }: BugHunterGameProps) {
       }
 
       // Update & Draw Lasers
-      lasers.forEach((laser, lIndex) => {
-        laser.y -= laser.speed;
+      for (let lIndex = lasers.length - 1; lIndex >= 0; lIndex--) {
+        const laser = lasers[lIndex];
+        laser.y -= laser.speed * dt;
 
         ctx.save();
         ctx.fillStyle = "#60A5FA";
         ctx.shadowColor = "#60A5FA";
-        ctx.shadowBlur = 10;
+        ctx.shadowBlur = 8;
         ctx.fillRect(laser.x, laser.y, laser.width, laser.height);
         ctx.restore();
 
         if (laser.y < -20) lasers.splice(lIndex, 1);
-      });
+      }
 
       // Update & Draw Bugs
-      bugs.forEach((bug, bIndex) => {
-        bug.y += bug.speed;
+      for (let bIndex = bugs.length - 1; bIndex >= 0; bIndex--) {
+        const bug = bugs[bIndex];
+        bug.y += bug.speed * dt;
 
-        // Draw Bug box
         ctx.save();
         ctx.fillStyle = bug.color;
         ctx.shadowColor = bug.color;
-        ctx.shadowBlur = 8;
+        ctx.shadowBlur = 6;
         ctx.beginPath();
         ctx.roundRect(bug.x, bug.y, bug.width, bug.height, 6);
         ctx.fill();
@@ -305,7 +341,7 @@ export default function BugHunterGame({ isOpen, onClose }: BugHunterGameProps) {
         ctx.fillText(`🐛 ${bug.label}`, bug.x + bug.width / 2, bug.y + 18);
         ctx.restore();
 
-        // Collision with player -> GameOver
+        // Player Collision
         if (
           bug.y + bug.height >= player.y &&
           bug.x + bug.width >= player.x &&
@@ -314,16 +350,19 @@ export default function BugHunterGame({ isOpen, onClose }: BugHunterGameProps) {
           createExplosion(player.x + player.width / 2, player.y, "#38BDF8");
           sfx.playHit();
           setGameState("gameover");
+          return;
         }
 
-        // Bug reached bottom -> GameOver
+        // Bottom Reached
         if (bug.y > canvas.height) {
           sfx.playHit();
           setGameState("gameover");
+          return;
         }
 
-        // Collision with lasers
-        lasers.forEach((laser, lIndex) => {
+        // Laser Hits
+        for (let lIndex = lasers.length - 1; lIndex >= 0; lIndex--) {
+          const laser = lasers[lIndex];
           if (
             laser.x >= bug.x &&
             laser.x <= bug.x + bug.width &&
@@ -336,24 +375,27 @@ export default function BugHunterGame({ isOpen, onClose }: BugHunterGameProps) {
 
             if (bug.hp <= 0) {
               sfx.playHit();
-              currentScore += 15;
-              setScore(currentScore);
+              scoreRef.current += 15;
+              setScore(scoreRef.current);
               bugs.splice(bIndex, 1);
 
-              if (currentScore > highScore) {
-                setHighScore(currentScore);
-                localStorage.setItem("bughunter_highscore", currentScore.toString());
-              }
+              setHighScore((prev) => {
+                const next = Math.max(prev, scoreRef.current);
+                localStorage.setItem("bughunter_highscore", next.toString());
+                return next;
+              });
+              break;
             }
           }
-        });
-      });
+        }
+      }
 
       // Update & Draw Particles
-      particles.forEach((p, pIndex) => {
-        p.x += p.vx;
-        p.y += p.vy;
-        p.alpha -= 0.03;
+      for (let pIndex = particles.length - 1; pIndex >= 0; pIndex--) {
+        const p = particles[pIndex];
+        p.x += p.vx * dt;
+        p.y += p.vy * dt;
+        p.alpha -= 2.0 * dt;
 
         ctx.save();
         ctx.globalAlpha = Math.max(0, p.alpha);
@@ -364,14 +406,14 @@ export default function BugHunterGame({ isOpen, onClose }: BugHunterGameProps) {
         ctx.restore();
 
         if (p.alpha <= 0) particles.splice(pIndex, 1);
-      });
+      }
 
       if (gameState === "playing") {
         animationFrameId = requestAnimationFrame(loop);
       }
     };
 
-    loop();
+    animationFrameId = requestAnimationFrame(loop);
 
     return () => {
       cancelAnimationFrame(animationFrameId);
@@ -381,9 +423,11 @@ export default function BugHunterGame({ isOpen, onClose }: BugHunterGameProps) {
       canvas.removeEventListener("touchmove", handleTouchMove);
       canvas.removeEventListener("click", handleCanvasClick);
     };
-  }, [isOpen, gameState, highScore]);
+  }, [isOpen, gameState, triggerLevelUpToast]);
 
   const startGame = () => {
+    scoreRef.current = 0;
+    levelRef.current = 1;
     setScore(0);
     setLevel(1);
     setGameState("playing");
@@ -397,78 +441,91 @@ export default function BugHunterGame({ isOpen, onClose }: BugHunterGameProps) {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md"
+        className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/85 backdrop-blur-md overflow-y-auto"
       >
         <motion.div
-          initial={{ scale: 0.9, opacity: 0 }}
+          initial={{ scale: 0.95, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          exit={{ scale: 0.9, opacity: 0 }}
-          className="relative w-full max-w-[650px] bg-[#0F172A] border border-sky-500/30 rounded-2xl overflow-hidden shadow-2xl shadow-sky-500/10 flex flex-col"
+          exit={{ scale: 0.95, opacity: 0 }}
+          className="relative w-full max-w-[620px] bg-[#0B0F19] border border-sky-500/30 rounded-2xl overflow-hidden shadow-2xl shadow-sky-500/10 flex flex-col my-auto"
         >
-          {/* Header */}
-          <div className="flex items-center justify-between px-6 py-4 border-b border-slate-800 bg-slate-900/80">
-            <div className="flex items-center gap-2">
-              <span className="text-xl">👾</span>
+          {/* Responsive Header */}
+          <div className="flex items-center justify-between px-4 sm:px-6 py-3.5 border-b border-slate-800/80 bg-slate-900/90">
+            <div className="flex items-center gap-2.5">
+              <span className="text-xl sm:text-2xl">👾</span>
               <div>
-                <h3 className="font-space font-bold text-white text-base leading-none">
+                <h3 className="font-space font-bold text-white text-sm sm:text-base leading-none">
                   Bug Hunter <span className="text-sky-400">· Arcade</span>
                 </h3>
-                <p className="text-xs text-slate-400 mt-1">Elimine os bugs e proteja o código!</p>
+                <p className="text-[11px] sm:text-xs text-slate-400 mt-1">Elimine os bugs e escale o sistema!</p>
               </div>
             </div>
 
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2">
               <button
                 onClick={() => setSoundOn(!soundOn)}
                 className="p-2 text-slate-400 hover:text-white rounded-lg transition-colors bg-slate-800/50"
                 title={soundOn ? "Mutar Som" : "Ativar Som"}
               >
-                {soundOn ? <Volume2 size={18} /> : <VolumeX size={18} />}
+                {soundOn ? <Volume2 size={16} /> : <VolumeX size={16} />}
               </button>
               <button
                 onClick={onClose}
                 className="p-2 text-slate-400 hover:text-white rounded-lg transition-colors bg-slate-800/50"
               >
-                <X size={18} />
+                <X size={16} />
               </button>
             </div>
           </div>
 
           {/* Stats Bar */}
-          <div className="flex items-center justify-between px-6 py-2.5 bg-slate-900/50 border-b border-slate-800/60 font-mono text-xs text-slate-300">
-            <div className="flex items-center gap-4">
+          <div className="flex items-center justify-between px-4 sm:px-6 py-2.5 bg-slate-950 border-b border-slate-800/60 font-mono text-xs text-slate-300">
+            <div className="flex items-center gap-3 sm:gap-5">
               <span>PONTOS: <strong className="text-sky-400">{score}</strong></span>
               <span>NÍVEL: <strong className="text-amber-400">{level}</strong></span>
             </div>
-            <div className="flex items-center gap-1.5 text-amber-400">
+            <div className="flex items-center gap-1.5 text-amber-400 font-bold">
               <Trophy size={14} />
-              <span>RECORDE: {highScore}</span>
+              <span>{highScore}</span>
             </div>
           </div>
 
-          {/* Canvas & Overlay screens */}
-          <div className="relative w-full h-[400px] bg-slate-950 flex items-center justify-center overflow-hidden">
+          {/* Game Canvas Box */}
+          <div className="relative w-full aspect-[4/3] sm:h-[380px] bg-slate-950 flex items-center justify-center overflow-hidden">
             <canvas
               ref={canvasRef}
               width={600}
               height={400}
-              className="w-full h-full cursor-crosshair touch-none"
+              className="w-full h-full cursor-crosshair touch-none select-none"
             />
+
+            {/* Level Up Notification Toast */}
+            {levelUpToast && (
+              <motion.div
+                initial={{ y: -20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                exit={{ y: -20, opacity: 0 }}
+                className="absolute top-4 inset-x-0 mx-auto w-max px-4 py-1.5 rounded-full bg-amber-500/20 border border-amber-400/40 text-amber-300 font-mono text-xs font-bold flex items-center gap-1.5 shadow-lg backdrop-blur-md"
+              >
+                <Zap size={14} className="animate-bounce text-amber-400" />
+                <span>{levelUpToast}</span>
+              </motion.div>
+            )}
 
             {/* Start Overlay */}
             {gameState === "start" && (
               <div className="absolute inset-0 flex flex-col items-center justify-center p-6 bg-slate-950/90 text-center">
-                <div className="w-16 h-16 rounded-full bg-sky-500/10 border border-sky-500/30 flex items-center justify-center mb-4 text-3xl animate-bounce">
+                <div className="w-14 h-14 rounded-2xl bg-sky-500/10 border border-sky-500/30 flex items-center justify-center mb-3 text-3xl animate-pulse">
                   🚀
                 </div>
-                <h4 className="text-2xl font-space font-bold text-white mb-2">Bug Hunter: Tech Lead Edition</h4>
-                <p className="text-sm text-slate-400 max-w-md mb-6 leading-relaxed">
-                  Utilize as **Setas / A-D** ou o **Rato** para mover o foguete. Prima **Espaço** ou **Clique** para disparar soluções e eliminar os bugs!
+                <h4 className="text-xl sm:text-2xl font-space font-bold text-white mb-2">Bug Hunter: Tech Lead Edition</h4>
+                <p className="text-xs sm:text-sm text-slate-400 max-w-md mb-5 leading-relaxed">
+                  Controle o foguete com as **Setas / Rato / Ecrã Tátil**. Prima **Espaço** ou **Clique** para disparar.
                 </p>
 
                 <button
                   onClick={startGame}
-                  className="px-8 py-3.5 rounded-xl bg-gradient-to-r from-sky-500 to-indigo-600 text-white font-semibold flex items-center gap-2 hover:opacity-90 shadow-lg shadow-sky-500/20 transition-all hover:scale-105"
+                  className="px-7 py-3 rounded-xl bg-gradient-to-r from-sky-500 to-indigo-600 text-white font-semibold flex items-center gap-2 hover:opacity-90 shadow-lg shadow-sky-500/20 transition-all hover:scale-105"
                 >
                   <Play size={18} /> Iniciar Jogo
                 </button>
@@ -479,19 +536,19 @@ export default function BugHunterGame({ isOpen, onClose }: BugHunterGameProps) {
             {gameState === "gameover" && (
               <div className="absolute inset-0 flex flex-col items-center justify-center p-6 bg-slate-950/95 text-center animate-fade-in">
                 <div className="text-4xl mb-2">💥</div>
-                <h4 className="text-2xl font-space font-bold text-rose-500 mb-1">Bug em Produção!</h4>
-                <p className="text-sm text-slate-400 mb-4">
+                <h4 className="text-xl sm:text-2xl font-space font-bold text-rose-500 mb-1">Bug em Produção!</h4>
+                <p className="text-xs sm:text-sm text-slate-400 mb-4">
                   Eliminou <strong className="text-white">{Math.floor(score / 15)} bugs</strong> e alcançou <strong className="text-sky-400">{score} pontos</strong>!
                 </p>
 
-                <div className="p-4 rounded-xl bg-slate-900 border border-slate-800 max-w-sm mb-6 text-xs text-slate-300 leading-relaxed">
-                  💡 <em>"Precisa de um Tech Lead experiente para eliminar os bugs e escalar o seu projeto?"</em>
+                <div className="p-3.5 rounded-xl bg-slate-900 border border-slate-800 max-w-sm mb-5 text-xs text-slate-300 leading-relaxed">
+                  💡 <em>&quot;Precisa de um Tech Lead para eliminar os bugs e acelerar a sua equipa?&quot;</em>
                 </div>
 
                 <div className="flex flex-wrap gap-3 justify-center">
                   <button
                     onClick={startGame}
-                    className="px-6 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-medium flex items-center gap-2 transition-all border border-slate-700"
+                    className="px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-medium flex items-center gap-2 transition-all border border-slate-700 text-xs sm:text-sm"
                   >
                     <RotateCcw size={16} /> Jogar De Novo
                   </button>
@@ -499,7 +556,7 @@ export default function BugHunterGame({ isOpen, onClose }: BugHunterGameProps) {
                     href="https://wa.me/244942031240"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="px-6 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-medium flex items-center gap-2 transition-all shadow-lg shadow-emerald-600/20"
+                    className="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-medium flex items-center gap-2 transition-all shadow-lg shadow-emerald-600/20 text-xs sm:text-sm"
                   >
                     <MessageSquare size={16} /> Falar com o Jesimiel
                   </a>
@@ -509,9 +566,10 @@ export default function BugHunterGame({ isOpen, onClose }: BugHunterGameProps) {
           </div>
 
           {/* Footer Controls Help */}
-          <div className="px-6 py-3 bg-slate-900/90 border-t border-slate-800 flex items-center justify-between text-[11px] text-slate-400 font-mono">
-            <span>Controlo: Setas / Rato (Mover) · Espaço / Clique (Disparar)</span>
-            <span>Made with ❤️ by Jesimiel</span>
+          <div className="px-4 sm:px-6 py-2.5 bg-slate-900 border-t border-slate-800/80 flex items-center justify-between text-[11px] text-slate-400 font-mono">
+            <span className="hidden sm:inline">Setas / Rato (Mover) · Espaço (Disparar)</span>
+            <span className="sm:hidden">Toque no ecrã para jogar</span>
+            <span>By Jesimiel Nóbrega</span>
           </div>
         </motion.div>
       </motion.div>
