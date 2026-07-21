@@ -66,27 +66,26 @@ export default function InteractiveDock({
     },
   ];
 
-  // Calculate smooth macOS dock magnification scale based on distance to hovered item
+  // Subtle, elegant magnification scale and offset to prevent clipping or extreme overflow
   const getScale = (idx: number) => {
     if (hoveredIdx === null) return 1;
     const distance = Math.abs(hoveredIdx - idx);
-    if (distance === 0) return 1.35;
-    if (distance === 1) return 1.15;
-    if (distance === 2) return 1.05;
+    if (distance === 0) return 1.18;
+    if (distance === 1) return 1.08;
     return 1;
   };
 
   const getYOffset = (idx: number) => {
     if (hoveredIdx === null) return 0;
     const distance = Math.abs(hoveredIdx - idx);
-    if (distance === 0) return -8;
-    if (distance === 1) return -4;
+    if (distance === 0) return -4;
+    if (distance === 1) return -2;
     return 0;
   };
 
   return (
-    <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 pointer-events-auto select-none">
-      {/* Centered Theme-Aware Glassmorphism Dock Pill */}
+    <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 pointer-events-auto select-none">
+      {/* Centered Theme-Aware Glassmorphism Dock Container */}
       <motion.div
         initial={{ y: 40, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
@@ -94,8 +93,9 @@ export default function InteractiveDock({
         style={{
           background: "var(--bg-nav)",
           borderColor: "var(--bdr-strong)",
+          boxShadow: "0 20px 40px -10px rgba(0, 0, 0, 0.3), 0 0 0 1px var(--bdr-strong)",
         }}
-        className="px-3.5 py-2.5 backdrop-blur-2xl border rounded-full shadow-2xl flex items-center gap-2 sm:gap-3 transition-colors duration-300"
+        className="px-4 py-3 backdrop-blur-2xl border rounded-full flex items-center gap-2.5 sm:gap-3.5 transition-all duration-300"
       >
         {dockItems.map((item, idx) => {
           const Icon = item.icon;
@@ -105,20 +105,21 @@ export default function InteractiveDock({
 
           return (
             <div key={item.id} className="relative group">
-              {/* Pinterest/macOS Style Floating Tooltip Badge (Theme-Aligned) */}
+              {/* Floating Tooltip Badge */}
               <AnimatePresence>
                 {isHovered && (
                   <motion.div
-                    initial={{ opacity: 0, y: 6, scale: 0.88 }}
-                    animate={{ opacity: 1, y: -14, scale: 1 }}
-                    exit={{ opacity: 0, y: 6, scale: 0.88 }}
-                    transition={{ type: "spring", stiffness: 500, damping: 28 }}
+                    initial={{ opacity: 0, y: 4, scale: 0.92 }}
+                    animate={{ opacity: 1, y: -18, scale: 1 }}
+                    exit={{ opacity: 0, y: 4, scale: 0.92 }}
+                    transition={{ type: "spring", stiffness: 450, damping: 25 }}
                     style={{
                       background: "var(--bg-mobile)",
                       borderColor: "var(--bdr-strong)",
                       color: "var(--txt)",
+                      boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.3)",
                     }}
-                    className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 px-3 py-1.5 border rounded-xl shadow-2xl pointer-events-none whitespace-nowrap z-50 flex flex-col items-center backdrop-blur-xl"
+                    className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1.5 border rounded-xl pointer-events-none whitespace-nowrap z-50 flex flex-col items-center backdrop-blur-2xl"
                   >
                     <span className="text-xs font-bold leading-tight" style={{ color: "var(--txt-white)" }}>
                       {item.label}
@@ -134,7 +135,7 @@ export default function InteractiveDock({
               <motion.button
                 animate={{ scale, y: yOffset }}
                 transition={{ type: "spring", stiffness: 450, damping: 25 }}
-                whileTap={{ scale: 0.92 }}
+                whileTap={{ scale: 0.94 }}
                 onMouseEnter={() => setHoveredIdx(idx)}
                 onMouseLeave={() => setHoveredIdx(null)}
                 onClick={item.action}
@@ -143,9 +144,9 @@ export default function InteractiveDock({
                   borderColor: "var(--bdr)",
                   color: "var(--txt-card)",
                 }}
-                className={`w-10 h-10 sm:w-11 sm:h-11 rounded-full flex items-center justify-center border transition-colors duration-200 cursor-pointer shadow-md ${item.colorClass}`}
+                className={`w-10 h-10 sm:w-11 sm:h-11 rounded-full flex items-center justify-center border transition-colors duration-200 cursor-pointer shadow-sm ${item.colorClass}`}
               >
-                <Icon size={20} />
+                <Icon size={19} />
               </motion.button>
             </div>
           );
