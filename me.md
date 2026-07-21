@@ -89,12 +89,17 @@
 
 ---
 
-### 📊 Estatísticas de Código
+### 📊 Estatísticas do GitHub
 
-<div align="center">
-  <img height="180em" src="https://github-readme-stats.vercel.app/api?username=jesimielnobrega&show_icons=true&theme=tokyonight&include_all_commits=true&count_private=true" alt="Estatísticas do GitHub de Jesimiel Nóbrega" />
-  <img height="180em" src="https://github-readme-stats.vercel.app/api/top-langs/?username=jesimielnobrega&layout=compact&theme=tokyonight&hide=html,css&langs_count=8" alt="Linguagens Mais Utilizadas" />
-</div>
+<p align="center">
+  <a href="https://github.com/jesimielnobrega">
+    <img src="https://github-readme-stats.vercel.app/api?username=jesimielnobrega&show_icons=true&theme=tokyonight" alt="Estatísticas do GitHub" height="165" />
+  </a>
+  &nbsp;
+  <a href="https://github.com/jesimielnobrega">
+    <img src="https://github-readme-stats.vercel.app/api/top-langs/?username=jesimielnobrega&layout=compact&theme=tokyonight" alt="Linguagens Mais Utilizadas" height="165" />
+  </a>
+</p>
 
 ---
 
