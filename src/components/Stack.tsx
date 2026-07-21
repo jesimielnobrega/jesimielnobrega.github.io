@@ -34,7 +34,7 @@ export default function Stack({ lang }: StackProps) {
               <div className="core-icons">
                 {core.icon && (
                   <img
-                    src={`/assets/tech/${core.icon}.svg`}
+                    src={`./assets/tech/${core.icon}.svg`}
                     alt={core.name}
                     className="core-icon"
                     style={
@@ -68,7 +68,7 @@ export default function Stack({ lang }: StackProps) {
           {[...marquee, ...marquee].map((m, i) => (
             <span key={i} className="marquee-item">
               <img
-                src={`/assets/tech/${m.icon}.svg`}
+                src={`./assets/tech/${m.icon}.svg`}
                 alt=""
                 aria-hidden="true"
                 className="marquee-icon"

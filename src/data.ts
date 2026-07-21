@@ -73,7 +73,7 @@ export const courses: string[] = [
 export function buildProjects(P: ProjTranslations): Project[] {
   return [
     {
-      logo: '/assets/logos/acessoetp.png',
+      logo: './assets/logos/acessoetp.png',
       name: 'Acesso ETP',
       url: 'https://acessoetp.ao',
       domain: 'acessoetp.ao',
@@ -82,7 +82,7 @@ export function buildProjects(P: ProjTranslations): Project[] {
       stack: ['Laravel', 'Inertia', 'React', 'Python', 'CI/CD']
     },
     {
-      logo: '/assets/logos/sipe.png',
+      logo: './assets/logos/sipe.png',
       name: 'SIPE · SIPE-GPEL',
       url: 'https://sipe.ao',
       domain: 'sipe.ao · luanda.sipe.ao',
@@ -91,7 +91,7 @@ export function buildProjects(P: ProjTranslations): Project[] {
       stack: ['Laravel', 'Inertia', 'React', 'Python', 'CI/CD']
     },
     {
-      logo: '/assets/logos/ipil.png',
+      logo: './assets/logos/ipil.png',
       name: 'Portal do IPIL',
       url: 'https://ipil.ao',
       domain: 'portal.ipil.ao · ipil.ao',

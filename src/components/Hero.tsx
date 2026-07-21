@@ -100,7 +100,7 @@ export default function Hero({ lang, glowY }: HeroProps) {
 
         <div className="photo-frame">
           <img
-            src="/assets/hero.png"
+            src="./assets/hero.png"
             alt="Retrato de Jesimiel Nóbrega"
             loading="eager"
           />
