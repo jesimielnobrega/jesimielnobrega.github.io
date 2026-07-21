@@ -158,7 +158,7 @@ export default function BugHunterGame({ isOpen, onClose }: BugHunterGameProps) {
 
     const fireLaser = () => {
       const now = performance.now();
-      if (now - lastShoot > 160) {
+      if (now - lastShoot > 150) {
         lasers.push({
           x: player.x + player.width / 2 - 3,
           y: player.y,
@@ -172,22 +172,19 @@ export default function BugHunterGame({ isOpen, onClose }: BugHunterGameProps) {
     };
 
     const handleKeyDown = (e: KeyboardEvent) => {
-      if ([" ", "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.key)) {
+      if ([" ", "Spacebar", "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.key) || e.code === "Space") {
         e.preventDefault();
       }
       keys[e.key] = true;
-
-      if (e.key === " ") {
-        fireLaser();
-      }
+      keys[e.code] = true;
     };
 
     const handleKeyUp = (e: KeyboardEvent) => {
       keys[e.key] = false;
+      keys[e.code] = false;
     };
 
     const handleMouseMove = (e: MouseEvent) => {
-      // Only use mouse move if keyboard/touch dpad isn't active
       if (keys["ArrowLeft"] || keys["ArrowRight"] || touchCtrlRef.current.left || touchCtrlRef.current.right) return;
       const rect = canvas.getBoundingClientRect();
       const scaleX = canvas.width / rect.width;
@@ -253,7 +250,9 @@ export default function BugHunterGame({ isOpen, onClose }: BugHunterGameProps) {
       if (keys["ArrowRight"] || keys["d"] || keys["D"] || touchCtrlRef.current.right) {
         player.x = Math.min(canvas.width - player.width, player.x + player.speed * dt);
       }
-      if (touchCtrlRef.current.fire) {
+
+      // Continuous Auto-Fire when holding Space or Fire Button
+      if (keys[" "] || keys["Space"] || keys["Spacebar"] || touchCtrlRef.current.fire) {
         fireLaser();
       }
 
@@ -521,8 +520,8 @@ export default function BugHunterGame({ isOpen, onClose }: BugHunterGameProps) {
                 </div>
                 <h4 className="text-xl sm:text-2xl font-space font-bold text-white mb-2">Bug Hunter: Tech Lead Edition</h4>
                 <p className="text-xs sm:text-sm text-slate-400 max-w-md mb-5 leading-relaxed">
-                  No PC: **Setas / Rato** · **Espaço** para disparar. <br />
-                  No Telemóvel: Use os **Botões de Toque** ou toque direto no ecrã!
+                  No PC: Mantenha premido o **Espaço** ou use a **Seta Esquerda/Direita** para navegar e disparar simultaneamente! <br />
+                  No Telemóvel: Use o **DPad de Toque** ou toque direto no ecrã.
                 </p>
 
                 <button
