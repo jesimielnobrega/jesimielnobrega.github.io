@@ -17,7 +17,9 @@
   </p>
 
   <p align="center">
-    <a href="https://jesimielnobrega.github.io/"><b>🌐 Experimenta a minha aplicação online (Live Demo) »</b></a>
+    <a href="https://portfolio-ruby-eight-80.vercel.app/"><b>🚀 Ver no Vercel (Recomendado) »</b></a>
+    &nbsp; | &nbsp;
+    <a href="https://jesimielnobrega.github.io/"><b>🌐 Ver no GitHub Pages »</b></a>
   </p>
 
 </div>
@@ -163,7 +165,8 @@ Olá! Eu sou o **Jesimiel Nóbrega** — *Fullstack Developer & Tech Lead*. Lide
 - 💼 **LinkedIn:** [linkedin.com/in/jesimielnobrega](https://linkedin.com/in/jesimielnobrega)
 - ✉️ **Email:** [jesimielnobrega25@gmail.com](mailto:jesimielnobrega25@gmail.com)
 - 📱 **WhatsApp:** [+244 942 031 240](https://wa.me/244942031240)
-- 🌐 **O Meu Portfólio Live:** [jesimielnobrega.github.io](https://jesimielnobrega.github.io/)
+- 🌐 **O Meu Portfólio no Vercel:** [portfolio-ruby-eight-80.vercel.app](https://portfolio-ruby-eight-80.vercel.app/)
+- 🌐 **O Meu Portfólio no GitHub Pages:** [jesimielnobrega.github.io](https://jesimielnobrega.github.io/)
 
 ---
 
