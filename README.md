@@ -1,11 +1,11 @@
-# 🚀 Portfólio Pessoal — Jesimiel Nóbrega
+# 🚀 O Meu Portfólio Pessoal — Jesimiel Nóbrega
 
 <div align="center">
 
-  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=22&pause=1000&color=61DAFB&center=true&vCenter=true&width=550&lines=Jesimiel+N%C3%B3brega+%E2%80%94+Portf%C3%B3lio+Moderno;React+18+%7C+Vite+5+%7C+TypeScript+%7C+Framer+Motion;Suporte+Bilingue+(PT%2FEN)+%2B+Gerador+de+CVs" alt="Portfólio Banner" />
+  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=22&pause=1000&color=61DAFB&center=true&vCenter=true&width=550&lines=Jesimiel+N%C3%B3brega+%E2%80%94+Portf%C3%B3lio+Pessoal;React+18+%7C+Vite+5+%7C+TypeScript+%7C+Framer+Motion;Suporte+Bilingue+(PT%2FEN)+%2B+Gerador+de+CVs" alt="Portfólio Banner" />
 
   <p align="center">
-    <b>Aplicação Web moderna, responsiva e de alta performance desenvolvida com React 18, Vite 5 e Framer Motion.</b>
+    <b>Boas-vindas ao meu repositório! Esta é a minha aplicação Web pessoal, moderna e de alta performance que desenvolvi com React 18, Vite 5, TypeScript e Framer Motion.</b>
   </p>
 
   <p align="center">
@@ -17,7 +17,7 @@
   </p>
 
   <p align="center">
-    <a href="https://jesimielnobrega.github.io/"><b>🌐 Ver Demonstração Online (Live Demo) »</b></a>
+    <a href="https://jesimielnobrega.github.io/"><b>🌐 Experimenta a minha aplicação online (Live Demo) »</b></a>
   </p>
 
 </div>
@@ -27,86 +27,88 @@
 ## 📋 Índice
 
 - [📌 Visão Geral](#-visão-geral)
-- [✨ Principais Funcionalidades](#-principais-funcionalidades)
-- [🛠️ Stack Tecnológica](#️-stack-tecnológica)
-- [📁 Estrutura do Projeto](#-estrutura-do-projeto)
-- [⚡ Como Executar Localmente](#-como-executar-localmente)
-- [📄 Gerador de CVs em PDF](#-gerador-de-cvs-em-pdf)
-- [🔄 Workflow de Deploy (CI/CD)](#-workflow-de-deploy-cicd)
-- [👨‍💻 Autor](#-autor)
+- [✨ O Que Desenvolvi neste Projeto](#-o-que-desenvolvi-neste-projeto)
+- [🛠️ A Minha Stack Tecnológica](#️-a-minha-stack-tecnológica)
+- [📁 Estrutura do Meu Código](#-estrutura-do-meu-código)
+- [⚡ Como Executar o Meu Projeto Localmente](#-como-executar-o-meu-projeto-localmente)
+- [📄 O Meu Gerador de CVs em PDF](#-o-meu-gerador-de-cvs-em-pdf)
+- [🔄 O Meu Workflow de Deploy (CI/CD)](#-o-meu-workflow-de-deploy-cicd)
+- [👨‍💻 Sobre Mim & Contactos](#-sobre-mim--contactos)
 - [📝 Licença](#-licença)
 
 ---
 
 ## 📌 Visão Geral
 
-Este repositório contém o código-fonte do portfólio pessoal e profissional de **Jesimiel Nóbrega** (*Fullstack Developer & Tech Lead*). A plataforma foi concebida para apresentar projetos de grande escala (**nacional e provincial em Angola**), princípios de arquitetura de software, stack técnica e opções de contacto interativo.
+Criei este repositório para disponibilizar o código-fonte do meu portfólio pessoal e profissional. Desenvolvi esta aplicação com o objetivo de apresentar os meus projetos de grande escala (**nacional e provincial em Angola**), partilhar a minha stack tecnológica e demonstrar as minhas práticas de arquitetura de software e liderança técnica.
 
-Possui **suporte bilingue automático (PT/EN)**, motor de suporte a **múltiplos formatos de CV exportáveis em PDF**, micro-animações fluidas orientadas a performance e design responsivo otimizado para dispositivos móveis e desktops.
-
----
-
-## ✨ Principais Funcionalidades
-
-- 🌐 **Internacionalização (i18n):** Alternância instantânea entre Português e Inglês com tipagem TypeScript estrita.
-- 🎨 **Design & Micro-interações:** Animações de entrada, scroll progressivo, efeitos parallax e carrossel infinito (*marquee*) construídos com `Framer Motion` e `Tailwind CSS`.
-- 📜 **Motor de CVs Multi-Tema:** Sistema integrado de visualização e exportação de CVs em formato **A4** (Português/Inglês x Tema Claro/Tema Escuro).
-- 🖨️ **Automação de PDFs:** Script com Puppeteer headless (`generate-pdfs.ts`) para compilar automaticamente os ficheiros `.html` de CV para `.pdf` prontos a distribuir.
-- ⚡ **Build Utrafast:** Configurado com **Vite 5** para arranque instantâneo do servidor de desenvolvimento e bundling de produção otimizado.
-- 🚀 **Deploy Automatizado:** Integrado com GitHub Actions para publicar alterações em tempo real no GitHub Pages.
+No meu portfólio, implementei **suporte bilingue automático (PT/EN)**, um **sistema próprio de geração e exportação de CVs em PDF** (formatos A4 em temas claro e escuro), micro-animações fluidas orientadas a performance e um layout totalmente responsivo para dispositivos móveis e desktop.
 
 ---
 
-## 🛠️ Stack Tecnológica
+## ✨ O Que Desenvolvi neste Projeto
 
-| Categoria | Tecnologia / Ferramenta | Descrição |
+- 🌐 **Internacionalização Própria (i18n):** Projetei o motor de traduções para alternância instantânea entre Português e Inglês com tipagem estrita no TypeScript.
+- 🎨 **Design & Micro-interações Otimizadas:** Desenvolvi animações de entrada, scroll progressivo, efeitos parallax e um carrossel de tecnologias (*marquee*) utilizando `Framer Motion` e `Tailwind CSS`.
+- 📜 **Motor de CVs Multi-Tema:** Criei um sistema de visualização de currículos com suporte a 4 variantes (Português/Inglês x Tema Claro/Tema Escuro), formatados rigorosamente em padrão A4.
+- 🖨️ **Automação de PDFs com Puppeteer:** Escrevi o script `generate-pdfs.ts` para compilar automaticamente os ficheiros `.html` dos meus CVs em ficheiros `.pdf` prontos a descarregar.
+- ⚡ **Build de Alta Performance:** Configurei a aplicação com **Vite 5** para garantir tempos de carregamento ultra-rápidos e bundling leve.
+- 🚀 **Deploy Automatizado:** Configurei a integração contínua com GitHub Actions para publicar as minhas atualizações automaticamente.
+
+---
+
+## 🛠️ A Minha Stack Tecnológica
+
+| Categoria | Tecnologia / Ferramenta | Como a utilizei no meu projeto |
 | :--- | :--- | :--- |
-| **Core UI** | [React 18](https://react.dev/) | Biblioteca UI reativa com componentes tipados em TypeScript |
-| **Build System** | [Vite 5](https://vitejs.dev/) | Bundler moderno de alta performance baseado em ES Modules |
-| **Linguagem** | [TypeScript 5](https://www.typescriptlang.org/) | Tipagem estrita e segurança em tempo de compilação |
-| **Animações** | [Framer Motion 11](https://framer.com/motion) | Biblioteca de animações físicas, scrollspy e transições de estado |
-| **Estilização** | [Tailwind CSS v4](https://tailwindcss.com/) | Framework utility-first com design tokens modernos e CSS customizado |
-| **Ícones** | [Lucide React](https://lucide.dev/) | Coleção de ícones vetoriais leves e acessíveis |
-| **Automação PDF** | [Puppeteer Core](https://pptr.dev/) | Script Headless Chrome para renderização A4 e exportação PDF |
-| **CI/CD** | [GitHub Actions](https://github.com/features/actions) | Deploy automático para GitHub Pages em cada push para `main` |
+| **Core UI** | [React 18](https://react.dev/) | Construção dos meus componentes reutilizáveis e reativos em TypeScript |
+| **Build System** | [Vite 5](https://vitejs.dev/) | Bundler rápido para dev server instantâneo e build otimizado |
+| **Linguagem** | [TypeScript 5](https://www.typescriptlang.org/) | Tipagem estrita para segurança de código e autocompletion |
+| **Animações** | [Framer Motion 11](https://framer.com/motion) | Criação das animações de scroll, transições e interações visuais |
+| **Estilização** | [Tailwind CSS v4](https://tailwindcss.com/) | Estilização utility-first com design tokens personalizados |
+| **Ícones** | [Lucide React](https://lucide.dev/) | Ícones vetoriais modernos e leves para a interface |
+| **Automação PDF** | [Puppeteer Core](https://pptr.dev/) | Script Headless Chrome que programei para exportar os meus CVs |
+| **CI/CD** | [GitHub Actions](https://github.com/features/actions) | Automação do meu processo de build e deploy |
 
 ---
 
-## 📁 Estrutura do Projeto
+## 📁 Estrutura do Meu Código
 
 ```bash
 react-vite/
 ├── .github/
 │   └── workflows/
-│       └── deploy.yml          # Pipeline CI/CD de Build & Deploy no GitHub Pages
+│       └── deploy.yml          # O meu workflow de CI/CD para deploy automático
 ├── public/
-│   ├── assets/                 # Fotos, logos de projetos e ícones de tecnologia
-│   ├── cv/                     # Templates HTML dos CVs (PT/EN, Claro/Escuro)
-│   └── favicon.svg             # Favicon vetorial da aplicação
+│   ├── assets/                 # Minhas fotografias, logos de projetos e ícones
+│   ├── cv/                     # Meus templates HTML de CV (PT/EN, Claro/Escuro)
+│   └── favicon.svg             # Favicon personalizado da aplicação
 ├── src/
-│   ├── components/             # Componentes React reutilizáveis (Hero, Projects, Stack, UI...)
-│   ├── hooks/                  # Custom Hooks (useScrollSpy, etc.)
-│   ├── App.tsx                 # Layout principal e montagem das secções
-│   ├── data.ts                 # Configuração dos dados de projetos e stack
-│   ├── i18n.ts                 # Motor e dicionários de tradução (PT/EN)
-│   ├── index.css               # Estilos globais, keyframes e variáveis CSS
-│   └── main.tsx                # Ponto de entrada da aplicação React
-├── generate-pdfs.ts            # Script TypeScript de geração automática de PDFs
-├── me.md                       # README principal do perfil GitHub (@jesimielnobrega)
-├── index.html                  # Template HTML da SPA
-├── vite.config.ts              # Configuração do Vite (base paths, plugins)
-└── package.json                # Dependências e scripts do projeto
+│   ├── components/             # Os meus componentes React (Hero, Projects, Stack, UI...)
+│   ├── hooks/                  # Meus custom hooks (useScrollSpy, etc.)
+│   ├── App.tsx                 # Componente raiz e estruturação da página
+│   ├── data.ts                 # Configuração dos meus projetos, experiências e stack
+│   ├── i18n.ts                 # O meu motor e dicionários de tradução (PT/EN)
+│   ├── index.css               # Estilos globais e variáveis de design
+│   └── main.tsx                # Ponto de entrada da aplicação
+├── generate-pdfs.ts            # O meu script TypeScript de geração automática de PDFs
+├── me.md                       # O meu README de perfil para o GitHub (@jesimielnobrega)
+├── index.html                  # Template HTML base da minha SPA
+├── vite.config.ts              # A minha configuração do Vite
+└── package.json                # Dependências e scripts do meu projeto
 ```
 
 ---
 
-## ⚡ Como Executar Localmente
+## ⚡ Como Executar o Meu Projeto Localmente
+
+Se quiseres testar ou rodar a minha aplicação no teu ambiente local, basta seguires os passos abaixo:
 
 ### Pré-requisitos
-- **Node.js** v18.0.0 ou superior
-- **npm** v9.0.0 ou superior
+- **Node.js** (v18.0.0 ou superior)
+- **npm** (v9.0.0 ou superior)
 
-### 1. Clonar o repositório
+### 1. Clonar o meu repositório
 ```bash
 git clone https://github.com/jesimielnobrega/portfolio.git
 cd portfolio
@@ -121,65 +123,48 @@ npm install
 ```bash
 npm run dev
 ```
-O servidor ficará acessível no endereço indicado no terminal (por defeito: `http://localhost:5173`).
+O meu servidor ficará acessível no teu navegador em `http://localhost:5173`.
 
-### 4. Verificar tipos (TypeScript)
+### 4. Verificar a tipagem do meu código
 ```bash
 npm run typecheck
 ```
 
-### 5. Compilação para produção
+### 5. Gerar o build de produção
 ```bash
 npm run build
-```
-Os ficheiros estáticos compilados serão gerados na diretoria `/dist`.
-
-### 6. Pré-visualizar o build de produção
-```bash
-npm run preview
 ```
 
 ---
 
-## 📄 Gerador de CVs em PDF
+## 📄 O Meu Gerador de CVs em PDF
 
-O projeto possui um utilitário interno em `generate-pdfs.ts` que abre os ficheiros HTML presentes em `public/cv/` e converte-os automaticamente em PDFs com formato A4 exato.
+Programei um script em `generate-pdfs.ts` que utiliza o Puppeteer em modo headless para ler os meus ficheiros de CV em HTML (`public/cv/`) e convertê-los automaticamente para formato PDF A4.
 
-Para gerar ou atualizar os PDFs localmente:
+Se quiseres gerar ou atualizar os PDFs localmente:
 ```bash
 npm run generate-pdfs
 ```
 
 ---
 
-## 🔄 Workflow de Deploy (CI/CD)
+## 🔄 O Meu Workflow de Deploy (CI/CD)
 
-O projeto possui um workflow configurado em `.github/workflows/deploy.yml`.
-
-### Como publicar a sua própria versão:
-1. Faça o push das suas alterações para a branch `main`:
-   ```bash
-   git add .
-   git commit -m "feat: melhorias no portfólio"
-   git push origin main
-   ```
-2. No repositório GitHub, aceda a **Settings → Pages**.
-3. Em **Build and deployment**, certifique-se de que a **Source** está definida para **Deploy from a branch** e a branch para **`gh-pages`** / **`/ (root)`**.
-4. O deploy será efetuado automaticamente a cada `git push` na branch `main`.
+Criei um pipeline de deploy em `.github/workflows/deploy.yml`. Sempre que faço um `git push` para a branch `main`, o meu workflow compila o projeto e atualiza o site no GitHub Pages.
 
 ---
 
-## 👨‍💻 Autor
+## 👨‍💻 Sobre Mim & Contactos
 
-**Jesimiel Nóbrega** — *Fullstack Developer & Tech Lead*
+Olá! Eu sou o **Jesimiel Nóbrega** — *Fullstack Developer & Tech Lead*. Lidero equipas técnicas e desenvolvo soluções de grande escala em Angola (como o **Acesso ETP** e o **SIPE-GPEL**).
 
 - 💼 **LinkedIn:** [linkedin.com/in/jesimielnobrega](https://linkedin.com/in/jesimielnobrega)
 - ✉️ **Email:** [jesimielnobrega25@gmail.com](mailto:jesimielnobrega25@gmail.com)
 - 📱 **WhatsApp:** [+244 942 031 240](https://wa.me/244942031240)
-- 🌐 **Portfólio:** [jesimielnobrega.github.io](https://jesimielnobrega.github.io/)
+- 🌐 **O Meu Portfólio Live:** [jesimielnobrega.github.io](https://jesimielnobrega.github.io/)
 
 ---
 
 ## 📝 Licença
 
-Este projeto está sob a licença **MIT**. Consulte o ficheiro `LICENSE` para mais detalhes.
+Este projeto está sob a licença **MIT**. Sente-te à vontade para explorar o meu código!
