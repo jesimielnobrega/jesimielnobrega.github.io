@@ -48,6 +48,8 @@ No meu portfólio, implementei **suporte bilingue automático (PT/EN)**, um **si
 
 ## ✨ O Que Desenvolvi neste Projeto
 
+- 🎮 **Mini-Jogo Arcade (*Bug Hunter: Tech Lead Edition*):** Projetei um jogo 2D interativo com HTML5 Canvas e síntese de áudio retro (Web Audio API) onde o visitante elimina bugs (`NullPointer`, `500 Error`, etc.) e visualiza recordes em tempo real!
+- 💻 **Terminal CLI Interativo (*Nóbrega Shell*):** Criei uma consola retro acessível por `Ctrl + K` ou botão flutuante com comandos interativos (`help`, `projects`, `stack`, `matrix`, `sudo hire`, `game`).
 - 🌐 **Internacionalização Própria (i18n):** Projetei o motor de traduções para alternância instantânea entre Português e Inglês com tipagem estrita no TypeScript.
 - 🎨 **Design & Micro-interações Otimizadas:** Desenvolvi animações de entrada, scroll progressivo, efeitos parallax e um carrossel de tecnologias (*marquee*) utilizando `Framer Motion` e `Tailwind CSS`.
 - 📜 **Motor de CVs Multi-Tema:** Criei um sistema de visualização de currículos com suporte a 4 variantes (Português/Inglês x Tema Claro/Tema Escuro), formatados rigorosamente em padrão A4.

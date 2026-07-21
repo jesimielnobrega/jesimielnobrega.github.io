@@ -1,8 +1,9 @@
 import { useState, useEffect, useRef } from "react";
-import { useScroll, useTransform } from "framer-motion";
+import { useScroll, useTransform, motion } from "framer-motion";
 import { type Lang } from "./i18n";
 import { useTheme } from "./hooks/useTheme";
 import { useScrollSpy } from "./hooks/useScrollSpy";
+import { Terminal as TerminalIcon, Gamepad2 } from "lucide-react";
 
 import ScrollProgress from "./components/ui/ScrollProgress";
 import Navbar from "./components/Navbar";
@@ -13,15 +14,32 @@ import Experience from "./components/Experience";
 import Stack from "./components/Stack";
 import Contact from "./components/Contact";
 import Footer from "./components/Footer";
+import BugHunterGame from "./components/BugHunterGame";
+import TerminalModal from "./components/TerminalModal";
 
 export default function App() {
   const [lang, setLang] = useState<Lang>("pt");
   const { isDark, toggleTheme } = useTheme();
   const activeSection = useScrollSpy();
 
+  const [isGameOpen, setIsGameOpen] = useState(false);
+  const [isTerminalOpen, setIsTerminalOpen] = useState(false);
+
   useEffect(() => {
     document.documentElement.lang = lang;
   }, [lang]);
+
+  // Global Keyboard Shortcut listener (Ctrl+K / Cmd+K to open Terminal)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        setIsTerminalOpen((prev) => !prev);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
 
   const heroRef = useRef<HTMLElement>(null);
   const { scrollYProgress: heroScrollProgress } = useScroll({
@@ -71,6 +89,45 @@ export default function App() {
       </main>
 
       <Footer lang={lang} />
+
+      {/* Floating Interactive Dock (Bottom Right) */}
+      <div className="fixed bottom-6 right-6 z-40 flex flex-col sm:flex-row items-end sm:items-center gap-2.5">
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={() => setIsGameOpen(true)}
+          className="flex items-center gap-2 px-4 py-2.5 rounded-full bg-[#0F172A]/90 hover:bg-[#1E293B] text-sky-400 border border-sky-500/30 shadow-lg shadow-sky-500/10 backdrop-blur-md font-mono text-xs transition-all"
+        >
+          <Gamepad2 size={16} className="animate-pulse text-amber-400" />
+          <span>Mini-Game</span>
+        </motion.button>
+
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={() => setIsTerminalOpen(true)}
+          className="flex items-center gap-2 px-4 py-2.5 rounded-full bg-[#0F172A]/90 hover:bg-[#1E293B] text-slate-200 border border-slate-700 shadow-lg backdrop-blur-md font-mono text-xs transition-all"
+        >
+          <TerminalIcon size={15} className="text-emerald-400" />
+          <span>Terminal <kbd className="hidden sm:inline-block px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-[10px] text-slate-400">Ctrl+K</kbd></span>
+        </motion.button>
+      </div>
+
+      {/* Bug Hunter Arcade Modal */}
+      <BugHunterGame
+        isOpen={isGameOpen}
+        onClose={() => setIsGameOpen(false)}
+      />
+
+      {/* Terminal CLI Modal */}
+      <TerminalModal
+        isOpen={isTerminalOpen}
+        onClose={() => setIsTerminalOpen(false)}
+        onOpenGame={() => {
+          setIsTerminalOpen(false);
+          setIsGameOpen(true);
+        }}
+      />
     </div>
   );
 }
