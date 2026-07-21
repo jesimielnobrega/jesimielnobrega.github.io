@@ -1174,3 +1174,22 @@
     display: none !important;
   }
 }
+
+/* ── Global Interactive Cursors ────────────────────────────── */
+button,
+a,
+[role="button"],
+.btn-primary,
+.btn-ghost,
+.cta-btn,
+.lang-btn,
+.theme-btn,
+.burger-btn,
+.proj-card,
+.core-tile,
+.social-link,
+.contact-wa,
+.mobile-nav-link {
+  cursor: pointer !important;
+}
+

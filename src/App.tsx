@@ -14,6 +14,7 @@ import Stack from "./components/Stack";
 import Contact from "./components/Contact";
 import Footer from "./components/Footer";
 import BugHunterGame from "./components/BugHunterGame";
+import LogicPuzzleGame from "./components/LogicPuzzleGame";
 import TerminalModal from "./components/TerminalModal";
 import InteractiveDock from "./components/InteractiveDock";
 
@@ -23,6 +24,7 @@ export default function App() {
   const activeSection = useScrollSpy();
 
   const [isGameOpen, setIsGameOpen] = useState(false);
+  const [isLogicGameOpen, setIsLogicGameOpen] = useState(false);
   const [isTerminalOpen, setIsTerminalOpen] = useState(false);
 
   useEffect(() => {
@@ -90,10 +92,11 @@ export default function App() {
 
       <Footer lang={lang} />
 
-      {/* Glassmorphism Interactive Floating Dock */}
+      {/* Glassmorphism Interactive Floating Dock (Centered Bottom) */}
       <InteractiveDock
         lang={lang}
         onOpenGame={() => setIsGameOpen(true)}
+        onOpenLogicGame={() => setIsLogicGameOpen(true)}
         onOpenTerminal={() => setIsTerminalOpen(true)}
       />
 
@@ -101,6 +104,12 @@ export default function App() {
       <BugHunterGame
         isOpen={isGameOpen}
         onClose={() => setIsGameOpen(false)}
+      />
+
+      {/* Logic Architect Puzzle Modal */}
+      <LogicPuzzleGame
+        isOpen={isLogicGameOpen}
+        onClose={() => setIsLogicGameOpen(false)}
       />
 
       {/* Terminal CLI Modal */}
