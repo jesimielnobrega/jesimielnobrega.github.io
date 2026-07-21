@@ -164,8 +164,8 @@ O projeto possui um workflow configurado em `.github/workflows/deploy.yml`.
    git push origin main
    ```
 2. No repositório GitHub, aceda a **Settings → Pages**.
-3. Em **Build and deployment**, defina a **Source** para **GitHub Actions**.
-4. O deploy será efetuado automaticamente a cada `git push`.
+3. Em **Build and deployment**, certifique-se de que a **Source** está definida para **Deploy from a branch** e a branch para **`gh-pages`** / **`/ (root)`**.
+4. O deploy será efetuado automaticamente a cada `git push` na branch `main`.
 
 ---
 
