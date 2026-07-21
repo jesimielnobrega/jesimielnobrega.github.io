@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Play, RotateCcw, Trophy, Volume2, VolumeX, MessageSquare, Zap } from "lucide-react";
+import { X, Play, RotateCcw, Trophy, Volume2, VolumeX, MessageSquare, Zap, ArrowLeft, ArrowRight, Flame } from "lucide-react";
 
 interface BugHunterGameProps {
   isOpen: boolean;
@@ -35,7 +35,7 @@ class SoundFX {
       osc.start();
       osc.stop(this.ctx.currentTime + 0.08);
     } catch {
-      // Ignore audio context errors on un-interacted browsers
+      // Ignore
     }
   }
 
@@ -94,7 +94,9 @@ export default function BugHunterGame({ isOpen, onClose }: BugHunterGameProps) {
   const [soundOn, setSoundOn] = useState(true);
   const [levelUpToast, setLevelUpToast] = useState<string | null>(null);
 
-  // Keep references to score & level to avoid state re-render lags inside animation frame loop
+  // Virtual Touch Controls State
+  const touchCtrlRef = useRef({ left: false, right: false, fire: false });
+
   const scoreRef = useRef(0);
   const levelRef = useRef(1);
 
@@ -124,7 +126,6 @@ export default function BugHunterGame({ isOpen, onClose }: BugHunterGameProps) {
     let animationFrameId: number;
     let lastTime = performance.now();
 
-    // Reset game state refs
     scoreRef.current = 0;
     levelRef.current = 1;
     setScore(0);
@@ -135,7 +136,7 @@ export default function BugHunterGame({ isOpen, onClose }: BugHunterGameProps) {
       y: canvas.height - 45,
       width: 50,
       height: 32,
-      speed: 450, // pixels per sec
+      speed: 450,
     };
 
     let lasers: Array<{ x: number; y: number; width: number; height: number; speed: number }> = [];
@@ -154,14 +155,8 @@ export default function BugHunterGame({ isOpen, onClose }: BugHunterGameProps) {
     let lastShoot = 0;
     const keys: Record<string, boolean> = {};
 
-    // Prevent default page scroll on Space & Arrow keys!
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if ([" ", "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.key)) {
-        e.preventDefault();
-      }
-      keys[e.key] = true;
-
-      if (e.key === " " && performance.now() - lastShoot > 170) {
+    const fireLaser = () => {
+      if (performance.now() - lastShoot > 170) {
         lasers.push({
           x: player.x + player.width / 2 - 3,
           y: player.y,
@@ -171,6 +166,17 @@ export default function BugHunterGame({ isOpen, onClose }: BugHunterGameProps) {
         });
         sfx.playShoot();
         lastShoot = performance.now();
+      }
+    };
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if ([" ", "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"].includes(e.key)) {
+        e.preventDefault();
+      }
+      keys[e.key] = true;
+
+      if (e.key === " ") {
+        fireLaser();
       }
     };
 
@@ -195,17 +201,7 @@ export default function BugHunterGame({ isOpen, onClose }: BugHunterGameProps) {
     };
 
     const handleCanvasClick = () => {
-      if (performance.now() - lastShoot > 170) {
-        lasers.push({
-          x: player.x + player.width / 2 - 3,
-          y: player.y,
-          width: 6,
-          height: 14,
-          speed: 650,
-        });
-        sfx.playShoot();
-        lastShoot = performance.now();
-      }
+      fireLaser();
     };
 
     window.addEventListener("keydown", handleKeyDown);
@@ -215,7 +211,7 @@ export default function BugHunterGame({ isOpen, onClose }: BugHunterGameProps) {
     canvas.addEventListener("click", handleCanvasClick);
 
     const createExplosion = (x: number, y: number, color: string) => {
-      if (particles.length > 40) particles.splice(0, 15); // Cap particles to prevent lag
+      if (particles.length > 40) particles.splice(0, 15);
       for (let i = 0; i < 8; i++) {
         particles.push({
           x,
@@ -228,14 +224,12 @@ export default function BugHunterGame({ isOpen, onClose }: BugHunterGameProps) {
       }
     };
 
-    // Smooth Game Loop with Delta Time
     const loop = (now: number) => {
-      const dt = Math.min((now - lastTime) / 1000, 0.1); // Clamp dt to prevent teleporting on tab blur
+      const dt = Math.min((now - lastTime) / 1000, 0.1);
       lastTime = now;
 
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      // Background Grid
       ctx.fillStyle = "#090D16";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -248,12 +242,15 @@ export default function BugHunterGame({ isOpen, onClose }: BugHunterGameProps) {
         ctx.stroke();
       }
 
-      // Move Player
-      if (keys["ArrowLeft"] || keys["a"] || keys["A"]) {
+      // Move Player (Keyboard or Touch DPad)
+      if (keys["ArrowLeft"] || keys["a"] || keys["A"] || touchCtrlRef.current.left) {
         player.x = Math.max(0, player.x - player.speed * dt);
       }
-      if (keys["ArrowRight"] || keys["d"] || keys["D"]) {
+      if (keys["ArrowRight"] || keys["d"] || keys["D"] || touchCtrlRef.current.right) {
         player.x = Math.min(canvas.width - player.width, player.x + player.speed * dt);
+      }
+      if (touchCtrlRef.current.fire) {
+        fireLaser();
       }
 
       // Draw Ship
@@ -278,7 +275,7 @@ export default function BugHunterGame({ isOpen, onClose }: BugHunterGameProps) {
       ctx.fill();
       ctx.restore();
 
-      // Check Level Up
+      // Level Up Check
       const calcLevel = Math.floor(scoreRef.current / 100) + 1;
       if (calcLevel !== levelRef.current) {
         levelRef.current = calcLevel;
@@ -307,7 +304,7 @@ export default function BugHunterGame({ isOpen, onClose }: BugHunterGameProps) {
         });
       }
 
-      // Update & Draw Lasers
+      // Lasers
       for (let lIndex = lasers.length - 1; lIndex >= 0; lIndex--) {
         const laser = lasers[lIndex];
         laser.y -= laser.speed * dt;
@@ -322,7 +319,7 @@ export default function BugHunterGame({ isOpen, onClose }: BugHunterGameProps) {
         if (laser.y < -20) lasers.splice(lIndex, 1);
       }
 
-      // Update & Draw Bugs
+      // Bugs
       for (let bIndex = bugs.length - 1; bIndex >= 0; bIndex--) {
         const bug = bugs[bIndex];
         bug.y += bug.speed * dt;
@@ -390,7 +387,7 @@ export default function BugHunterGame({ isOpen, onClose }: BugHunterGameProps) {
         }
       }
 
-      // Update & Draw Particles
+      // Particles
       for (let pIndex = particles.length - 1; pIndex >= 0; pIndex--) {
         const p = particles[pIndex];
         p.x += p.vx * dt;
@@ -449,7 +446,7 @@ export default function BugHunterGame({ isOpen, onClose }: BugHunterGameProps) {
           exit={{ scale: 0.95, opacity: 0 }}
           className="relative w-full max-w-[620px] bg-[#0B0F19] border border-sky-500/30 rounded-2xl overflow-hidden shadow-2xl shadow-sky-500/10 flex flex-col my-auto"
         >
-          {/* Responsive Header */}
+          {/* Header */}
           <div className="flex items-center justify-between px-4 sm:px-6 py-3.5 border-b border-slate-800/80 bg-slate-900/90">
             <div className="flex items-center gap-2.5">
               <span className="text-xl sm:text-2xl">👾</span>
@@ -520,7 +517,8 @@ export default function BugHunterGame({ isOpen, onClose }: BugHunterGameProps) {
                 </div>
                 <h4 className="text-xl sm:text-2xl font-space font-bold text-white mb-2">Bug Hunter: Tech Lead Edition</h4>
                 <p className="text-xs sm:text-sm text-slate-400 max-w-md mb-5 leading-relaxed">
-                  Controle o foguete com as **Setas / Rato / Ecrã Tátil**. Prima **Espaço** ou **Clique** para disparar.
+                  No PC: **Setas / Rato** · **Espaço** para disparar. <br />
+                  No Telemóvel: Use os **Botões de Toque** ou toque direto no ecrã!
                 </p>
 
                 <button
@@ -565,12 +563,46 @@ export default function BugHunterGame({ isOpen, onClose }: BugHunterGameProps) {
             )}
           </div>
 
-          {/* Footer Controls Help */}
-          <div className="px-4 sm:px-6 py-2.5 bg-slate-900 border-t border-slate-800/80 flex items-center justify-between text-[11px] text-slate-400 font-mono">
-            <span className="hidden sm:inline">Setas / Rato (Mover) · Espaço (Disparar)</span>
-            <span className="sm:hidden">Toque no ecrã para jogar</span>
-            <span>By Jesimiel Nóbrega</span>
-          </div>
+          {/* Virtual Mobile Touch Controls Bar */}
+          {gameState === "playing" && (
+            <div className="px-4 py-3 bg-slate-900 border-t border-slate-800 flex items-center justify-between gap-3">
+              {/* Movement DPad */}
+              <div className="flex items-center gap-2">
+                <button
+                  onMouseDown={() => (touchCtrlRef.current.left = true)}
+                  onMouseUp={() => (touchCtrlRef.current.left = false)}
+                  onTouchStart={() => (touchCtrlRef.current.left = true)}
+                  onTouchEnd={() => (touchCtrlRef.current.left = false)}
+                  className="w-12 h-11 rounded-xl bg-slate-800 active:bg-sky-600/80 border border-slate-700 text-white flex items-center justify-center cursor-pointer select-none active:scale-95 transition-all"
+                  title="Mover para Esquerda"
+                >
+                  <ArrowLeft size={20} />
+                </button>
+                <button
+                  onMouseDown={() => (touchCtrlRef.current.right = true)}
+                  onMouseUp={() => (touchCtrlRef.current.right = false)}
+                  onTouchStart={() => (touchCtrlRef.current.right = true)}
+                  onTouchEnd={() => (touchCtrlRef.current.right = false)}
+                  className="w-12 h-11 rounded-xl bg-slate-800 active:bg-sky-600/80 border border-slate-700 text-white flex items-center justify-center cursor-pointer select-none active:scale-95 transition-all"
+                  title="Mover para Direita"
+                >
+                  <ArrowRight size={20} />
+                </button>
+              </div>
+
+              {/* Virtual Fire Button */}
+              <button
+                onMouseDown={() => (touchCtrlRef.current.fire = true)}
+                onMouseUp={() => (touchCtrlRef.current.fire = false)}
+                onTouchStart={() => (touchCtrlRef.current.fire = true)}
+                onTouchEnd={() => (touchCtrlRef.current.fire = false)}
+                className="flex-1 max-w-[200px] h-11 rounded-xl bg-gradient-to-r from-sky-500 to-indigo-600 active:from-sky-600 active:to-indigo-700 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 cursor-pointer select-none shadow-md shadow-sky-500/20 active:scale-95 transition-all"
+              >
+                <Flame size={18} className="text-amber-300 animate-pulse" />
+                <span>DISPARAR</span>
+              </button>
+            </div>
+          )}
         </motion.div>
       </motion.div>
     </AnimatePresence>

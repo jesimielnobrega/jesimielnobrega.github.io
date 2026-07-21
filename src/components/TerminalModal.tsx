@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Terminal as TerminalIcon, X, Maximize2, Minimize2, CornerDownLeft } from "lucide-react";
+import { Terminal as TerminalIcon, X, Maximize2, Minimize2, CornerDownLeft, Sparkles } from "lucide-react";
 
 interface TerminalModalProps {
   isOpen: boolean;
@@ -23,7 +23,7 @@ export default function TerminalModal({ isOpen, onClose, onOpenGame }: TerminalM
       output: (
         <div className="text-slate-300 space-y-1">
           <div className="text-sky-400 font-bold">Nóbrega Shell v2.4.0 (x86_64-pc-linux-gnu)</div>
-          <div>Digite <span className="text-amber-300 font-mono font-bold">help</span> para listar todos os comandos disponíveis.</div>
+          <div>Digite ou toque nos botões rápidos abaixo para executar os comandos.</div>
           <div>Dica: Digite <span className="text-emerald-400 font-mono font-bold">game</span> para abrir o Arcade ou <span className="text-purple-400 font-mono font-bold">matrix</span> para ativá-lo!</div>
         </div>
       ),
@@ -37,6 +37,18 @@ export default function TerminalModal({ isOpen, onClose, onOpenGame }: TerminalM
   const inputRef = useRef<HTMLInputElement | null>(null);
   const endRef = useRef<HTMLDivElement | null>(null);
   const matrixCanvasRef = useRef<HTMLCanvasElement | null>(null);
+
+  const quickCommands = [
+    { label: "help", color: "border-sky-500/40 text-sky-400" },
+    { label: "about", color: "border-slate-700 text-slate-300" },
+    { label: "projects", color: "border-amber-500/40 text-amber-400" },
+    { label: "stack", color: "border-blue-500/40 text-blue-400" },
+    { label: "game", color: "border-emerald-500/40 text-emerald-400 font-bold" },
+    { label: "matrix", color: "border-purple-500/40 text-purple-400" },
+    { label: "sudo hire", color: "border-emerald-500/60 text-emerald-300 font-bold" },
+    { label: "cv", color: "border-slate-700 text-slate-300" },
+    { label: "clear", color: "border-slate-800 text-slate-500" },
+  ];
 
   useEffect(() => {
     if (isOpen) {
@@ -200,7 +212,7 @@ export default function TerminalModal({ isOpen, onClose, onOpenGame }: TerminalM
         isError = true;
         outputNode = (
           <div className="text-rose-400 text-xs">
-            Comando não reconhecido: &quot;{cmdStr}&quot;. Digite <strong className="text-amber-300">help</strong> para ver a lista de comandos.
+            Comando não reconhecido: &quot;{cmdStr}&quot;. Digite ou toque em <strong className="text-amber-300">help</strong> para ver a lista.
           </div>
         );
     }
@@ -256,14 +268,14 @@ export default function TerminalModal({ isOpen, onClose, onOpenGame }: TerminalM
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm"
+        className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/75 backdrop-blur-sm"
       >
         <motion.div
           initial={{ scale: 0.95, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.95, opacity: 0 }}
           className={`relative bg-[#090D16] border border-slate-800 rounded-xl overflow-hidden shadow-2xl flex flex-col transition-all duration-300 ${
-            isMaximized ? "w-full h-full max-w-none rounded-none" : "w-full max-w-[720px] h-[480px]"
+            isMaximized ? "w-full h-full max-w-none rounded-none" : "w-full max-w-[720px] h-[520px] sm:h-[480px]"
           }`}
         >
           {/* Top Titlebar */}
@@ -283,11 +295,11 @@ export default function TerminalModal({ isOpen, onClose, onOpenGame }: TerminalM
             <div className="flex items-center gap-2 text-slate-400">
               <button
                 onClick={() => setIsMaximized(!isMaximized)}
-                className="p-1 hover:text-white transition-colors"
+                className="p-1 hover:text-white transition-colors cursor-pointer"
               >
                 {isMaximized ? <Minimize2 size={15} /> : <Maximize2 size={15} />}
               </button>
-              <button onClick={onClose} className="p-1 hover:text-white transition-colors">
+              <button onClick={onClose} className="p-1 hover:text-white transition-colors cursor-pointer">
                 <X size={16} />
               </button>
             </div>
@@ -296,7 +308,7 @@ export default function TerminalModal({ isOpen, onClose, onOpenGame }: TerminalM
           {/* Terminal Screen Logs */}
           <div
             onClick={() => inputRef.current?.focus()}
-            className="flex-1 p-4 font-mono text-sm overflow-y-auto space-y-3 cursor-text selection:bg-sky-500 selection:text-white"
+            className="flex-1 p-4 font-mono text-xs sm:text-sm overflow-y-auto space-y-3 cursor-text selection:bg-sky-500 selection:text-white"
           >
             {history.map((log) => (
               <div key={log.id} className="space-y-1">
@@ -312,8 +324,24 @@ export default function TerminalModal({ isOpen, onClose, onOpenGame }: TerminalM
             <div ref={endRef} />
           </div>
 
-          {/* Active Prompt Input */}
-          <div className="p-3 bg-[#0D1322] border-t border-slate-800/80 flex items-center gap-2 font-mono text-sm">
+          {/* Quick Mobile Touch Command Pills Bar */}
+          <div className="px-3 py-2 bg-[#0C1220] border-t border-slate-800/80 flex items-center gap-1.5 overflow-x-auto no-scrollbar">
+            <span className="text-[10px] font-mono text-slate-500 shrink-0 flex items-center gap-1">
+              <Sparkles size={11} className="text-amber-400" /> Atalhos:
+            </span>
+            {quickCommands.map((qc) => (
+              <button
+                key={qc.label}
+                onClick={() => handleCommand(qc.label)}
+                className={`px-2.5 py-1 rounded-lg border bg-slate-900/90 text-[11px] font-mono shrink-0 hover:bg-slate-800 transition-all cursor-pointer ${qc.color}`}
+              >
+                {qc.label}
+              </button>
+            ))}
+          </div>
+
+          {/* Active Prompt Input Bar */}
+          <div className="p-3 bg-[#0D1322] border-t border-slate-800/80 flex items-center gap-2 font-mono text-xs sm:text-sm">
             <span className="text-emerald-400 font-bold shrink-0">jesimiel@nobrega-dev:~$</span>
             <input
               ref={inputRef}
@@ -321,13 +349,13 @@ export default function TerminalModal({ isOpen, onClose, onOpenGame }: TerminalM
               value={inputVal}
               onChange={(e) => setInputVal(e.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder="Digite um comando (ex: help, game, matrix)..."
+              placeholder="Digite um comando ou toque nos atalhos acima..."
               className="flex-1 bg-transparent text-slate-100 focus:outline-none placeholder:text-slate-600 border-none p-0"
               autoFocus
             />
             <button
               onClick={() => handleCommand(inputVal)}
-              className="p-1.5 text-slate-400 hover:text-sky-400 transition-colors"
+              className="p-1.5 text-slate-400 hover:text-sky-400 transition-colors cursor-pointer"
             >
               <CornerDownLeft size={16} />
             </button>
