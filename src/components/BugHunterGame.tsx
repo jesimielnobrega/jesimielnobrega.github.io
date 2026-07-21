@@ -464,14 +464,14 @@ export default function BugHunterGame({ isOpen, onClose }: BugHunterGameProps) {
             <div className="flex items-center gap-2">
               <button
                 onClick={() => setSoundOn(!soundOn)}
-                className="p-2 text-slate-400 hover:text-white rounded-lg transition-colors bg-slate-800/50"
+                className="p-2 text-slate-400 hover:text-white rounded-lg transition-colors bg-slate-800/50 cursor-pointer"
                 title={soundOn ? "Mutar Som" : "Ativar Som"}
               >
                 {soundOn ? <Volume2 size={16} /> : <VolumeX size={16} />}
               </button>
               <button
                 onClick={onClose}
-                className="p-2 text-slate-400 hover:text-white rounded-lg transition-colors bg-slate-800/50"
+                className="p-2 text-slate-400 hover:text-white rounded-lg transition-colors bg-slate-800/50 cursor-pointer"
               >
                 <X size={16} />
               </button>
@@ -525,7 +525,7 @@ export default function BugHunterGame({ isOpen, onClose }: BugHunterGameProps) {
 
                 <button
                   onClick={startGame}
-                  className="px-7 py-3 rounded-xl bg-gradient-to-r from-sky-500 to-indigo-600 text-white font-semibold flex items-center gap-2 hover:opacity-90 shadow-lg shadow-sky-500/20 transition-all hover:scale-105"
+                  className="px-7 py-3 rounded-xl bg-gradient-to-r from-sky-500 to-indigo-600 text-white font-semibold flex items-center gap-2 hover:opacity-90 shadow-lg shadow-sky-500/20 transition-all hover:scale-105 cursor-pointer"
                 >
                   <Play size={18} /> Iniciar Jogo
                 </button>
@@ -548,7 +548,7 @@ export default function BugHunterGame({ isOpen, onClose }: BugHunterGameProps) {
                 <div className="flex flex-wrap gap-3 justify-center">
                   <button
                     onClick={startGame}
-                    className="px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-medium flex items-center gap-2 transition-all border border-slate-700 text-xs sm:text-sm"
+                    className="px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-medium flex items-center gap-2 transition-all border border-slate-700 text-xs sm:text-sm cursor-pointer"
                   >
                     <RotateCcw size={16} /> Jogar De Novo
                   </button>
@@ -556,7 +556,7 @@ export default function BugHunterGame({ isOpen, onClose }: BugHunterGameProps) {
                     href="https://wa.me/244942031240"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-medium flex items-center gap-2 transition-all shadow-lg shadow-emerald-600/20 text-xs sm:text-sm"
+                    className="px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-medium flex items-center gap-2 transition-all shadow-lg shadow-emerald-600/20 text-xs sm:text-sm cursor-pointer"
                   >
                     <MessageSquare size={16} /> Falar com o Jesimiel
                   </a>

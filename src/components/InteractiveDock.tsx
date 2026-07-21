@@ -25,7 +25,7 @@ export default function InteractiveDock({
       icon: Gamepad2,
       label: "Bug Hunter",
       sub: isPt ? "Arcade Mini-Game" : "Arcade Mini-Game",
-      color: "hover:text-sky-400 hover:border-sky-500/50 hover:bg-sky-500/10",
+      colorClass: "hover:text-sky-400 hover:border-sky-500/50",
       action: onOpenGame,
     },
     {
@@ -33,7 +33,7 @@ export default function InteractiveDock({
       icon: BrainCircuit,
       label: "Logic Architect",
       sub: isPt ? "Desafio Lógico" : "Logic Puzzle",
-      color: "hover:text-purple-400 hover:border-purple-500/50 hover:bg-purple-500/10",
+      colorClass: "hover:text-purple-400 hover:border-purple-500/50",
       action: onOpenLogicGame,
     },
     {
@@ -41,7 +41,7 @@ export default function InteractiveDock({
       icon: Terminal,
       label: "Nóbrega Shell",
       sub: "CLI (Ctrl+K)",
-      color: "hover:text-emerald-400 hover:border-emerald-500/50 hover:bg-emerald-500/10",
+      colorClass: "hover:text-emerald-400 hover:border-emerald-500/50",
       action: onOpenTerminal,
     },
     {
@@ -49,7 +49,7 @@ export default function InteractiveDock({
       icon: FileText,
       label: "Curriculum Vitae",
       sub: isPt ? "Formato A4" : "A4 Resume",
-      color: "hover:text-amber-400 hover:border-amber-500/50 hover:bg-amber-500/10",
+      colorClass: "hover:text-amber-400 hover:border-amber-500/50",
       action: () => {
         window.open(isPt ? "cv/CV-JesimielNobrega-PT-Claro.html" : "cv/CV-JesimielNobrega-EN-Claro.html", "_blank");
       },
@@ -59,52 +59,91 @@ export default function InteractiveDock({
       icon: MessageSquare,
       label: isPt ? "Falar Comigo" : "Chat Direct",
       sub: "WhatsApp",
-      color: "hover:text-emerald-300 hover:border-emerald-500/50 hover:bg-emerald-500/10",
+      colorClass: "hover:text-emerald-300 hover:border-emerald-500/50",
       action: () => {
         window.open("https://wa.me/244942031240", "_blank");
       },
     },
   ];
 
+  // Calculate smooth macOS dock magnification scale based on distance to hovered item
+  const getScale = (idx: number) => {
+    if (hoveredIdx === null) return 1;
+    const distance = Math.abs(hoveredIdx - idx);
+    if (distance === 0) return 1.35;
+    if (distance === 1) return 1.15;
+    if (distance === 2) return 1.05;
+    return 1;
+  };
+
+  const getYOffset = (idx: number) => {
+    if (hoveredIdx === null) return 0;
+    const distance = Math.abs(hoveredIdx - idx);
+    if (distance === 0) return -8;
+    if (distance === 1) return -4;
+    return 0;
+  };
+
   return (
-    <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 pointer-events-auto">
-      {/* Centered Glassmorphism Dock Pill */}
+    <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 pointer-events-auto select-none">
+      {/* Centered Theme-Aware Glassmorphism Dock Pill */}
       <motion.div
         initial={{ y: 40, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ type: "spring", stiffness: 260, damping: 20 }}
-        className="px-3.5 py-2.5 bg-[#090D16]/85 backdrop-blur-2xl border border-white/15 rounded-full shadow-2xl shadow-black/80 flex items-center gap-2 sm:gap-3"
+        transition={{ type: "spring", stiffness: 300, damping: 22 }}
+        style={{
+          background: "var(--bg-nav)",
+          borderColor: "var(--bdr-strong)",
+        }}
+        className="px-3.5 py-2.5 backdrop-blur-2xl border rounded-full shadow-2xl flex items-center gap-2 sm:gap-3 transition-colors duration-300"
       >
         {dockItems.map((item, idx) => {
           const Icon = item.icon;
           const isHovered = hoveredIdx === idx;
+          const scale = getScale(idx);
+          const yOffset = getYOffset(idx);
 
           return (
             <div key={item.id} className="relative group">
-              {/* Pinterest/macOS Style Floating Tooltip Badge */}
+              {/* Pinterest/macOS Style Floating Tooltip Badge (Theme-Aligned) */}
               <AnimatePresence>
                 {isHovered && (
                   <motion.div
-                    initial={{ opacity: 0, y: 6, scale: 0.9 }}
-                    animate={{ opacity: 1, y: -12, scale: 1 }}
-                    exit={{ opacity: 0, y: 6, scale: 0.9 }}
-                    transition={{ duration: 0.15 }}
-                    className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1 px-3 py-1.5 bg-[#090D16]/95 border border-slate-700/80 rounded-xl shadow-xl pointer-events-none whitespace-nowrap z-50 flex flex-col items-center backdrop-blur-md"
+                    initial={{ opacity: 0, y: 6, scale: 0.88 }}
+                    animate={{ opacity: 1, y: -14, scale: 1 }}
+                    exit={{ opacity: 0, y: 6, scale: 0.88 }}
+                    transition={{ type: "spring", stiffness: 500, damping: 28 }}
+                    style={{
+                      background: "var(--bg-mobile)",
+                      borderColor: "var(--bdr-strong)",
+                      color: "var(--txt)",
+                    }}
+                    className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 px-3 py-1.5 border rounded-xl shadow-2xl pointer-events-none whitespace-nowrap z-50 flex flex-col items-center backdrop-blur-xl"
                   >
-                    <span className="text-xs font-bold text-white leading-tight">{item.label}</span>
-                    <span className="text-[10px] text-slate-400 font-mono mt-0.5">{item.sub}</span>
+                    <span className="text-xs font-bold leading-tight" style={{ color: "var(--txt-white)" }}>
+                      {item.label}
+                    </span>
+                    <span className="text-[10px] font-mono mt-0.5" style={{ color: "var(--txt-subtle)" }}>
+                      {item.sub}
+                    </span>
                   </motion.div>
                 )}
               </AnimatePresence>
 
-              {/* Dock Icon Button */}
+              {/* Dock Icon Button with Physics Magnification */}
               <motion.button
-                whileHover={{ scale: 1.22, y: -4 }}
+                animate={{ scale, y: yOffset }}
+                transition={{ type: "spring", stiffness: 450, damping: 25 }}
                 whileTap={{ scale: 0.92 }}
                 onMouseEnter={() => setHoveredIdx(idx)}
                 onMouseLeave={() => setHoveredIdx(null)}
                 onClick={item.action}
-                className={`w-10 h-10 sm:w-11 sm:h-11 rounded-full flex items-center justify-center bg-slate-800/80 border border-slate-700/60 text-slate-300 transition-all duration-200 cursor-pointer shadow-md ${item.color}`}
+                style={{
+                  background: "var(--bg-surface)",
+                  borderColor: "var(--bdr)",
+                  color: "var(--txt-card)",
+                }}
+                className={`w-10 h-10 sm:w-11 sm:h-11 rounded-full flex items-center justify-center border transition-colors duration-200 cursor-pointer shadow-md ${item.colorClass}`}
               >
                 <Icon size={20} />
               </motion.button>
