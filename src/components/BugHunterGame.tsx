@@ -26,14 +26,14 @@ class SoundFX {
       const osc = this.ctx.createOscillator();
       const gain = this.ctx.createGain();
       osc.type = "square";
-      osc.frequency.setValueAtTime(800, this.ctx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(200, this.ctx.currentTime + 0.08);
-      gain.gain.setValueAtTime(0.1, this.ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.08);
+      osc.frequency.setValueAtTime(700, this.ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(180, this.ctx.currentTime + 0.07);
+      gain.gain.setValueAtTime(0.08, this.ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.07);
       osc.connect(gain);
       gain.connect(this.ctx.destination);
       osc.start();
-      osc.stop(this.ctx.currentTime + 0.08);
+      osc.stop(this.ctx.currentTime + 0.07);
     } catch {
       // Ignore
     }
@@ -47,14 +47,14 @@ class SoundFX {
       const osc = this.ctx.createOscillator();
       const gain = this.ctx.createGain();
       osc.type = "sawtooth";
-      osc.frequency.setValueAtTime(220, this.ctx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(40, this.ctx.currentTime + 0.12);
-      gain.gain.setValueAtTime(0.15, this.ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.12);
+      osc.frequency.setValueAtTime(200, this.ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(50, this.ctx.currentTime + 0.1);
+      gain.gain.setValueAtTime(0.1, this.ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.1);
       osc.connect(gain);
       gain.connect(this.ctx.destination);
       osc.start();
-      osc.stop(this.ctx.currentTime + 0.12);
+      osc.stop(this.ctx.currentTime + 0.1);
     } catch {
       // Ignore
     }
@@ -69,14 +69,13 @@ class SoundFX {
       const gain = this.ctx.createGain();
       osc.type = "triangle";
       osc.frequency.setValueAtTime(440, this.ctx.currentTime);
-      osc.frequency.setValueAtTime(554, this.ctx.currentTime + 0.08);
-      osc.frequency.setValueAtTime(659, this.ctx.currentTime + 0.16);
-      gain.gain.setValueAtTime(0.15, this.ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.25);
+      osc.frequency.setValueAtTime(660, this.ctx.currentTime + 0.1);
+      gain.gain.setValueAtTime(0.12, this.ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, this.ctx.currentTime + 0.2);
       osc.connect(gain);
       gain.connect(this.ctx.destination);
       osc.start();
-      osc.stop(this.ctx.currentTime + 0.25);
+      osc.stop(this.ctx.currentTime + 0.2);
     } catch {
       // Ignore
     }
@@ -94,7 +93,7 @@ export default function BugHunterGame({ isOpen, onClose }: BugHunterGameProps) {
   const [soundOn, setSoundOn] = useState(true);
   const [levelUpToast, setLevelUpToast] = useState<string | null>(null);
 
-  // Virtual Touch Controls State
+  // Virtual DPad state
   const touchCtrlRef = useRef({ left: false, right: false, fire: false });
 
   const scoreRef = useRef(0);
@@ -126,6 +125,8 @@ export default function BugHunterGame({ isOpen, onClose }: BugHunterGameProps) {
     let animationFrameId: number;
     let lastTime = performance.now();
 
+    // Reset controls
+    touchCtrlRef.current = { left: false, right: false, fire: false };
     scoreRef.current = 0;
     levelRef.current = 1;
     setScore(0);
@@ -136,7 +137,7 @@ export default function BugHunterGame({ isOpen, onClose }: BugHunterGameProps) {
       y: canvas.height - 45,
       width: 50,
       height: 32,
-      speed: 450,
+      speed: 480,
     };
 
     let lasers: Array<{ x: number; y: number; width: number; height: number; speed: number }> = [];
@@ -144,11 +145,11 @@ export default function BugHunterGame({ isOpen, onClose }: BugHunterGameProps) {
     let particles: Array<{ x: number; y: number; vx: number; vy: number; color: string; alpha: number }> = [];
 
     const bugTypes = [
-      { label: "NullPointer", color: "#EF4444", hp: 1, speed: 140 },
-      { label: "500 Error", color: "#F59E0B", hp: 2, speed: 110 },
-      { label: "Merge Conflict", color: "#EC4899", hp: 2, speed: 125 },
-      { label: "Memory Leak", color: "#8B5CF6", hp: 3, speed: 90 },
-      { label: "Infinite Loop", color: "#10B981", hp: 1, speed: 190 },
+      { label: "NullPointer", color: "#EF4444", hp: 1, speed: 130 },
+      { label: "500 Error", color: "#F59E0B", hp: 2, speed: 100 },
+      { label: "Merge Conflict", color: "#EC4899", hp: 2, speed: 115 },
+      { label: "Memory Leak", color: "#8B5CF6", hp: 3, speed: 85 },
+      { label: "Infinite Loop", color: "#10B981", hp: 1, speed: 175 },
     ];
 
     let spawnTimer = 0;
@@ -156,16 +157,17 @@ export default function BugHunterGame({ isOpen, onClose }: BugHunterGameProps) {
     const keys: Record<string, boolean> = {};
 
     const fireLaser = () => {
-      if (performance.now() - lastShoot > 170) {
+      const now = performance.now();
+      if (now - lastShoot > 160) {
         lasers.push({
           x: player.x + player.width / 2 - 3,
           y: player.y,
           width: 6,
           height: 14,
-          speed: 650,
+          speed: 680,
         });
         sfx.playShoot();
-        lastShoot = performance.now();
+        lastShoot = now;
       }
     };
 
@@ -185,6 +187,8 @@ export default function BugHunterGame({ isOpen, onClose }: BugHunterGameProps) {
     };
 
     const handleMouseMove = (e: MouseEvent) => {
+      // Only use mouse move if keyboard/touch dpad isn't active
+      if (keys["ArrowLeft"] || keys["ArrowRight"] || touchCtrlRef.current.left || touchCtrlRef.current.right) return;
       const rect = canvas.getBoundingClientRect();
       const scaleX = canvas.width / rect.width;
       const mouseX = (e.clientX - rect.left) * scaleX;
@@ -211,13 +215,13 @@ export default function BugHunterGame({ isOpen, onClose }: BugHunterGameProps) {
     canvas.addEventListener("click", handleCanvasClick);
 
     const createExplosion = (x: number, y: number, color: string) => {
-      if (particles.length > 40) particles.splice(0, 15);
-      for (let i = 0; i < 8; i++) {
+      if (particles.length > 30) particles.splice(0, 10);
+      for (let i = 0; i < 6; i++) {
         particles.push({
           x,
           y,
-          vx: (Math.random() - 0.5) * 220,
-          vy: (Math.random() - 0.5) * 220,
+          vx: (Math.random() - 0.5) * 200,
+          vy: (Math.random() - 0.5) * 200,
           color,
           alpha: 1,
         });
@@ -225,7 +229,7 @@ export default function BugHunterGame({ isOpen, onClose }: BugHunterGameProps) {
     };
 
     const loop = (now: number) => {
-      const dt = Math.min((now - lastTime) / 1000, 0.1);
+      const dt = Math.min((now - lastTime) / 1000, 0.05);
       lastTime = now;
 
       ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -242,7 +246,7 @@ export default function BugHunterGame({ isOpen, onClose }: BugHunterGameProps) {
         ctx.stroke();
       }
 
-      // Move Player (Keyboard or Touch DPad)
+      // Movement Logic
       if (keys["ArrowLeft"] || keys["a"] || keys["A"] || touchCtrlRef.current.left) {
         player.x = Math.max(0, player.x - player.speed * dt);
       }
@@ -257,7 +261,7 @@ export default function BugHunterGame({ isOpen, onClose }: BugHunterGameProps) {
       ctx.save();
       ctx.fillStyle = "#38BDF8";
       ctx.shadowColor = "#38BDF8";
-      ctx.shadowBlur = 10;
+      ctx.shadowBlur = 8;
       ctx.beginPath();
       ctx.moveTo(player.x + player.width / 2, player.y);
       ctx.lineTo(player.x + player.width, player.y + player.height);
@@ -269,7 +273,7 @@ export default function BugHunterGame({ isOpen, onClose }: BugHunterGameProps) {
       ctx.fillStyle = "#F59E0B";
       ctx.beginPath();
       ctx.moveTo(player.x + 18, player.y + player.height);
-      ctx.lineTo(player.x + 25, player.y + player.height + 6 + Math.random() * 6);
+      ctx.lineTo(player.x + 25, player.y + player.height + 5 + Math.random() * 5);
       ctx.lineTo(player.x + 32, player.y + player.height);
       ctx.closePath();
       ctx.fill();
@@ -287,7 +291,7 @@ export default function BugHunterGame({ isOpen, onClose }: BugHunterGameProps) {
 
       // Spawn Bugs
       spawnTimer += dt;
-      const spawnInterval = Math.max(0.4, 1.2 - (levelRef.current - 1) * 0.15);
+      const spawnInterval = Math.max(0.45, 1.2 - (levelRef.current - 1) * 0.15);
 
       if (spawnTimer > spawnInterval) {
         spawnTimer = 0;
@@ -297,7 +301,7 @@ export default function BugHunterGame({ isOpen, onClose }: BugHunterGameProps) {
           y: -30,
           width: 85,
           height: 28,
-          speed: bType.speed + (levelRef.current - 1) * 20,
+          speed: bType.speed + (levelRef.current - 1) * 18,
           label: bType.label,
           color: bType.color,
           hp: bType.hp,
@@ -312,7 +316,7 @@ export default function BugHunterGame({ isOpen, onClose }: BugHunterGameProps) {
         ctx.save();
         ctx.fillStyle = "#60A5FA";
         ctx.shadowColor = "#60A5FA";
-        ctx.shadowBlur = 8;
+        ctx.shadowBlur = 6;
         ctx.fillRect(laser.x, laser.y, laser.width, laser.height);
         ctx.restore();
 
@@ -327,7 +331,7 @@ export default function BugHunterGame({ isOpen, onClose }: BugHunterGameProps) {
         ctx.save();
         ctx.fillStyle = bug.color;
         ctx.shadowColor = bug.color;
-        ctx.shadowBlur = 6;
+        ctx.shadowBlur = 5;
         ctx.beginPath();
         ctx.roundRect(bug.x, bug.y, bug.width, bug.height, 6);
         ctx.fill();
@@ -392,13 +396,13 @@ export default function BugHunterGame({ isOpen, onClose }: BugHunterGameProps) {
         const p = particles[pIndex];
         p.x += p.vx * dt;
         p.y += p.vy * dt;
-        p.alpha -= 2.0 * dt;
+        p.alpha -= 2.5 * dt;
 
         ctx.save();
         ctx.globalAlpha = Math.max(0, p.alpha);
         ctx.fillStyle = p.color;
         ctx.beginPath();
-        ctx.arc(p.x, p.y, 3, 0, Math.PI * 2);
+        ctx.arc(p.x, p.y, 2.5, 0, Math.PI * 2);
         ctx.fill();
         ctx.restore();
 
@@ -565,14 +569,16 @@ export default function BugHunterGame({ isOpen, onClose }: BugHunterGameProps) {
 
           {/* Virtual Mobile Touch Controls Bar */}
           {gameState === "playing" && (
-            <div className="px-4 py-3 bg-slate-900 border-t border-slate-800 flex items-center justify-between gap-3">
+            <div className="px-4 py-3 bg-slate-900 border-t border-slate-800 flex items-center justify-between gap-3 select-none">
               {/* Movement DPad */}
               <div className="flex items-center gap-2">
                 <button
                   onMouseDown={() => (touchCtrlRef.current.left = true)}
                   onMouseUp={() => (touchCtrlRef.current.left = false)}
+                  onMouseLeave={() => (touchCtrlRef.current.left = false)}
                   onTouchStart={() => (touchCtrlRef.current.left = true)}
                   onTouchEnd={() => (touchCtrlRef.current.left = false)}
+                  onTouchCancel={() => (touchCtrlRef.current.left = false)}
                   className="w-12 h-11 rounded-xl bg-slate-800 active:bg-sky-600/80 border border-slate-700 text-white flex items-center justify-center cursor-pointer select-none active:scale-95 transition-all"
                   title="Mover para Esquerda"
                 >
@@ -581,8 +587,10 @@ export default function BugHunterGame({ isOpen, onClose }: BugHunterGameProps) {
                 <button
                   onMouseDown={() => (touchCtrlRef.current.right = true)}
                   onMouseUp={() => (touchCtrlRef.current.right = false)}
+                  onMouseLeave={() => (touchCtrlRef.current.right = false)}
                   onTouchStart={() => (touchCtrlRef.current.right = true)}
                   onTouchEnd={() => (touchCtrlRef.current.right = false)}
+                  onTouchCancel={() => (touchCtrlRef.current.right = false)}
                   className="w-12 h-11 rounded-xl bg-slate-800 active:bg-sky-600/80 border border-slate-700 text-white flex items-center justify-center cursor-pointer select-none active:scale-95 transition-all"
                   title="Mover para Direita"
                 >
@@ -594,8 +602,10 @@ export default function BugHunterGame({ isOpen, onClose }: BugHunterGameProps) {
               <button
                 onMouseDown={() => (touchCtrlRef.current.fire = true)}
                 onMouseUp={() => (touchCtrlRef.current.fire = false)}
+                onMouseLeave={() => (touchCtrlRef.current.fire = false)}
                 onTouchStart={() => (touchCtrlRef.current.fire = true)}
                 onTouchEnd={() => (touchCtrlRef.current.fire = false)}
+                onTouchCancel={() => (touchCtrlRef.current.fire = false)}
                 className="flex-1 max-w-[200px] h-11 rounded-xl bg-gradient-to-r from-sky-500 to-indigo-600 active:from-sky-600 active:to-indigo-700 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 cursor-pointer select-none shadow-md shadow-sky-500/20 active:scale-95 transition-all"
               >
                 <Flame size={18} className="text-amber-300 animate-pulse" />
